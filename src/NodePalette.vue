@@ -1,0 +1,49 @@
+<template>
+<div class="node-palette">
+  <rpa-node-class v-for="nodeClass in nodeClasses" :key="nodeClass.type" v-bind="nodeClass" />
+</div>
+</template>
+
+<script>
+import NodeClass from './NodeClass'
+
+export default {
+  name: 'rpa-node-palette',
+
+  components: {
+    'rpa-node-class': NodeClass,
+  },
+
+  data() {
+    return {
+      nodeClasses: [
+        {type: 'ImageMatching', displayType: 'Image Matching'},
+        {type: 'KeyboardInput', displayType: 'Keyboard Input'},
+        {type: 'OpenExplorer', displayType: 'Open Folder'},
+        {type: 'FileRead', displayType: 'File Read'},
+        {type: 'UserInput', displayType: 'User Input'},
+        {type: 'Variable', displayType: 'Read/Write Variable'},
+        {type: 'Wait', displayType: 'Wait'},
+        {type: 'While', displayType: 'Loop'},
+        {type: 'WhileEnd', displayType: 'Loop End'}, // TODO
+      ]
+    }
+  }
+}
+</script>
+
+<style scoped>
+.node-palette {
+    position: fixed;
+    top: 64px;
+    bottom: 0;
+    left: 0;
+    width: 200px;
+    padding: 20px 10px;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background: #eee;
+    border-right: 1px solid #ccc;
+}
+</style>

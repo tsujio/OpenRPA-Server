@@ -1,0 +1,11 @@
+@mixin node-mixin {
+    background: #eeeeef;
+    border: 1px solid #346789;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.8em;
+    cursor: move;
+    width: 150px;
+    height: 60px;
+}
