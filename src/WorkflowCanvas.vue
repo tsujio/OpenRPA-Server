@@ -1,12 +1,15 @@
 <template>
 <div class="workflow-canvas">
   <template v-for="node in workflow">
-    <rpa-main-node v-if="node.type === 'Main'" v-bind="node" :key="node.id" />
+    <rpa-main-node v-if="node.type === 'Main'" :key="node.id"
+                   :id="node.id" :type="node.type" :displayType="node.displayType"
+                   :name.sync="node.name" :body.sync="node.body" />
   </template>
 </div>
 </template>
 
 <script>
+import uuidv4 from 'uuid/v4'
 import MainNode from './node/MainNode'
 
 export default {
@@ -17,6 +20,24 @@ export default {
   },
 
   props: ['workflow'],
+
+  created() {
+    this.$emit('update:workflow', this.getEmptyWorkflow());
+  },
+
+  methods: {
+    getEmptyWorkflow() {
+      return [
+        {
+          id: uuidv4(),
+          type: 'Main',
+          displayType: "",
+          name: "",
+          body: [],
+        },
+      ]
+    },
+  },
 }
 </script>
 

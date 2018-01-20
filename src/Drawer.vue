@@ -1,6 +1,6 @@
 <template>
 <div class="drawer">
-  <mdc-drawer temporary="true" :toggle-on="drawerEvent">
+  <mdc-drawer temporary :toggle-on="drawerEvent">
   </mdc-drawer>
 </div>
 </template>
