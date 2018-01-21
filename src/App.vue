@@ -6,6 +6,7 @@
     <main class="content">
       <rpa-node-palette />
       <rpa-workflow-panel />
+      <rpa-node-property-panel :node="nodeToConfigureProperty" @update:node="onNodePropertyUpdate" />
     </main>
   </mdc-layout-app>
 </div>
@@ -16,6 +17,7 @@ import Toolbar from './Toolbar'
 import Drawer from './Drawer'
 import NodePalette from './NodePalette'
 import WorkflowPanel from './WorkflowPanel'
+import NodePropertyPanel from './NodePropertyPanel'
 
 export default {
   name: 'app',
@@ -25,12 +27,28 @@ export default {
     'rpa-drawer': Drawer,
     'rpa-node-palette': NodePalette,
     'rpa-workflow-panel': WorkflowPanel,
+    'rpa-node-property-panel': NodePropertyPanel,
   },
 
   data() {
     return {
-      drawerEvent: 'toggle-drawer'
+      drawerEvent: 'toggle-drawer',
+      nodeToConfigureProperty: null,
     }
   },
+
+  created() {
+    var self = this;
+
+    this.$root.$on('node.click', function(node) {
+      self.nodeToConfigureProperty = node
+    })
+  },
+
+  methods: {
+    onNodePropertyUpdate(node) {
+      this.$root.$emit('update:nodeproperty', node)
+    }
+  }
 }
 </script>

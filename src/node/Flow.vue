@@ -3,11 +3,10 @@
   <rpa-successor-drop-area :predecessor-id="null" @successordrop="onSuccessorDrop" />
 
   <template v-for="node in body">
-    <rpa-image-matching-node :key="node.id" v-if="node.type === 'ImageMatching'"
-                             :id="node.id" :type="node.type" :displayType="node.displayType"
-                             :name.sync="node.name" />
+    <rpa-image-matching-node :key="node.id" v-if="node.type === 'ImageMatching'" v-bind="node"
+                             @update:node="onNodeUpdate" />
 
-    <rpa-successor-drop-area :predecessor-id="node.id" @successordrop="onSuccessorDrop" />
+    <rpa-successor-drop-area :key="'sda-' + node.id" :predecessor-id="node.id" @successordrop="onSuccessorDrop" />
   </template>
 </div>
 </template>
@@ -40,21 +39,44 @@ export default {
     onSuccessorDrop(predecessorId, nodeInfo) {
       const node = this.createNodeInstance(nodeInfo)
 
-      if (predecessorId === null) {
-        this.$emit('update:body', [node].concat(this.body))
-        return
+      // Find index where insert dropped node
+      var sliceIndex = 0
+      if (predecessorId !== null) {
+        for (let i = 0; i < this.body.length; i++) {
+          if (this.body[i].id === predecessorId) {
+            sliceIndex = i + 1
+            break
+          }
+        }
       }
 
+      // Notify to parent
+      this.$emit('update:body',
+                 this.body.slice(0, sliceIndex)
+                 .concat([node])
+                 .concat(this.body.slice(sliceIndex)))
+    },
+
+    onNodeUpdate(node) {
+      // Find index of node to update
+      var updateIndex = -1
       for (let i = 0; i < this.body.length; i++) {
-        if (this.body[i].id === predecessorId) {
-          this.$emit('update:body',
-                     this.body.slice(0, i + 1)
-                     .concat([node])
-                     .concat(this.body.slice(i + 1)))
+        if (this.body[i].id === node.id) {
+          updateIndex = i
           break
         }
       }
-    }
+
+      if (updateIndex === -1) {
+        throw new Error(`node (id=${node.id}) not found`)
+      }
+
+      // Notify to parent
+      this.$emit('update:body',
+                 this.body.slice(0, updateIndex)
+                 .concat(node)
+                 .concat(this.body.slice(updateIndex + 1)))
+    },
   }
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-<div class="image-matching-node">
+<div class="image-matching-node" @click="onClick">
   {{ name }}
 </div>
 </template>
@@ -11,6 +11,9 @@ export default {
   name: 'rpa-image-matching-node',
 
   mixins: [NodeMixin],
+
+  props: ['imageUrlPath', 'startPos', 'endPos', 'actionPos', 'action',
+          'windowTitle', 'timeout'],
 }
 </script>
 
