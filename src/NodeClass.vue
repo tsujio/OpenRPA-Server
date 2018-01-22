@@ -8,14 +8,18 @@
 export default {
   name: 'rpa-node-class',
 
-  props: ['type', 'displayType'],
+  props: ['type', 'displayType', 'ext'],
 
   methods: {
     onDragStart(e) {
-      e.dataTransfer.setData('text', JSON.stringify({
+      var nodeInfo = {
         type: this.type,
         displayType: this.displayType,
-      }))
+      }
+
+      nodeInfo = Object.assign(nodeInfo, this.ext)
+
+      e.dataTransfer.setData('text', JSON.stringify(nodeInfo))
     }
   }
 }

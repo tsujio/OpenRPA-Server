@@ -17,7 +17,15 @@ export default {
   data() {
     return {
       nodeClasses: [
-        {type: 'ImageMatching', displayType: 'Image Matching'},
+        {type: 'ImageMatching', displayType: 'Image Matching', ext: {
+          imageUrlPath: "",
+          windowTitle: "",
+          startPos: [0, 0],
+          endPos: [0, 0],
+          action: "Nothing",
+          actionPos: [0, 0],
+          timeout: 10,
+        }},
         {type: 'KeyboardInput', displayType: 'Keyboard Input'},
         {type: 'OpenExplorer', displayType: 'Open Folder'},
         {type: 'FileRead', displayType: 'File Read'},
