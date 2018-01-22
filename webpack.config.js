@@ -4,9 +4,9 @@ var webpack = require('webpack')
 module.exports = {
   entry: './src/main.js',
   output: {
-    path: path.resolve(__dirname, './dist'),
-    publicPath: '/dist/',
-    filename: 'app.js'
+    path: path.resolve(__dirname, './app/public'),
+    publicPath: '/',
+    filename: 'openrpa.js'
   },
   module: {
     rules: [
