@@ -5,9 +5,16 @@ services:
     depends_on:
       - "openrpa-mongo"
     build: .
-    links:
-      - "openrpa-mongo:mongo"
+    ports:
+      - "${PORT}:80"
+    networks:
+      - "backend"
   openrpa-mongo:
+    container_name: "openrpa-mongo"
     image: "mongo:3.6"
     volumes:
       - "/var/lib/OpenRPA/mongo:/data/db"
+    networks:
+      - "backend"
+networks:
+  backend:

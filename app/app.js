@@ -13,8 +13,6 @@ const moment = require('moment')
 const secureRandom = require('secure-random')
 const MongoClient = require('mongodb').MongoClient
 const PORT = process.env.PORT
-const MONGO_ADDR = process.env.MONGO_PORT_27017_TCP_ADDR
-const MONGO_PORT = process.env.MONGO_PORT_27017_TCP_PORT
 
 app.use(bodyParser.json())
 
@@ -24,9 +22,8 @@ const upload = multer({
   inMemory: true,
 })
 
-const mongoURL = `mongodb://${MONGO_ADDR}:${MONGO_PORT}`
 var db = null
-MongoClient.connect(mongoURL, (err, mongodb) => {
+MongoClient.connect('mongodb://openrpa-mongo', (err, mongodb) => {
   if (err) {
     console.log(err)
     process.exit(1)
