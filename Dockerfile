@@ -4,9 +4,11 @@ ARG HTTP_PROXY=""
 
 ARG HTTPS_PROXY=""
 
-RUN npm -g config set proxy $HTTP_PROXY && \
-    npm -g config set https-proxy $HTTPS_PROXY && \
-    npm -g config set registry http://registry.npmjs.org/
+RUN if [ -n "$HTTP_PROXY" ]; then npm -g config set proxy "$HTTP_PROXY"; fi
+
+RUN if [ -n "$HTTPS_PROXY" ]; then npm -g config set https-proxy "$HTTPS_PROXY"; fi
+
+RUN npm -g config set registry http://registry.npmjs.org/
 
 COPY . /openrpa-server
 
