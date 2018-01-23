@@ -3,8 +3,12 @@
   <rpa-successor-drop-area :predecessor-id="null" @successordrop="onSuccessorDrop" />
 
   <template v-for="node in body">
-    <rpa-image-matching-node :key="node.id" v-if="node.type === 'ImageMatching'" v-bind="node"
-                             @update:node="onNodeUpdate" />
+    <rpa-image-matching-node
+       :key="node.id" v-if="node.type === 'ImageMatching'" v-bind="node"
+       @update:node="onNodeUpdate" />
+    <rpa-while-node
+       :key="node.id" v-else-if="node.type === 'While'" v-bind="node"
+       @update:node="onNodeUpdate" />
 
     <rpa-successor-drop-area :key="'sda-' + node.id" :predecessor-id="node.id" @successordrop="onSuccessorDrop" />
   </template>
@@ -15,6 +19,7 @@
 import uuidv4 from 'uuid/v4'
 import SuccessorDropArea from './SuccessorDropArea'
 import ImageMatchingNode from './ImageMatchingNode'
+import WhileNode from './WhileNode'
 
 export default {
   name: 'rpa-flow',
@@ -22,6 +27,7 @@ export default {
   components: {
     'rpa-successor-drop-area': SuccessorDropArea,
     'rpa-image-matching-node': ImageMatchingNode,
+    'rpa-while-node': WhileNode,
   },
 
   props: ['body'],
@@ -81,6 +87,10 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import './node-mixin';
 
+.flow {
+    @include container-node-mixin;
+}
 </style>

@@ -32,8 +32,9 @@ export default {
         {type: 'UserInput', displayType: 'User Input'},
         {type: 'Variable', displayType: 'Read/Write Variable'},
         {type: 'Wait', displayType: 'Wait'},
-        {type: 'While', displayType: 'Loop'},
-        {type: 'WhileEnd', displayType: 'Loop End'}, // TODO
+        {type: 'While', displayType: 'Loop', ext: {
+          body: [],
+        }},
       ]
     }
   }

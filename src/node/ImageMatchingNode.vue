@@ -1,5 +1,5 @@
 <template>
-<div class="image-matching-node" @click="onClick">
+<div class="image-matching-node" @click.stop="onClick">
   {{ name }}
 </div>
 </template>

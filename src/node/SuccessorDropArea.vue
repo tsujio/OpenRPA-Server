@@ -62,7 +62,7 @@ export default {
 .successor-drop-area {
     width: 200px;
     height: 20px;
-    margin-left: calc((150px - 200px) / 2);
+    margin: auto;
 }
 
 .successor-drop-area.emphasized {

@@ -48,7 +48,7 @@ export default {
 
   data() {
     return {
-      node: {}
+      node: {},
     }
   },
 
@@ -116,6 +116,10 @@ export default {
 </script>
 
 <style scoped>
+.node-type {
+    display: block;
+}
+
 .capture-button {
     display: block;
     margin: 2rem 10px;

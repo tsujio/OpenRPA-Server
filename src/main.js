@@ -5,6 +5,9 @@ import App from './App.vue'
 
 Vue.use(VueMDCAdapter)
 
+import Flow from './node/Flow'
+Vue.component('rpa-flow', Flow)
+
 new Vue({
   el: '#app',
   render: h => h(App)

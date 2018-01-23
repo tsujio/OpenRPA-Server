@@ -12,7 +12,6 @@
 import NodeMixin from './NodeMixin'
 import StartNode from './StartNode'
 import EndNode from './EndNode'
-import Flow from './Flow'
 
 export default {
   name: 'rpa-main-node',
@@ -22,7 +21,6 @@ export default {
   components: {
     'rpa-start-node': StartNode,
     'rpa-end-node': EndNode,
-    'rpa-flow': Flow,
   },
 
   props: ['body'],
@@ -37,6 +35,10 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import './node-mixin';
 
+.main-node {
+    @include container-node-mixin;
+}
 </style>
