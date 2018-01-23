@@ -1,0 +1,13 @@
+version: "3"
+services:
+  openrpa-server:
+    image: "openrpa-server"
+    depends_on:
+      - "openrpa-mongo"
+    build: .
+    links:
+      - "openrpa-mongo:mongo"
+  openrpa-mongo:
+    image: "mongo:3.6"
+    volumes:
+      - "/var/lib/OpenRPA/mongo:/data/db"

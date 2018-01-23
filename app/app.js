@@ -13,8 +13,8 @@ const moment = require('moment')
 const secureRandom = require('secure-random')
 const MongoClient = require('mongodb').MongoClient
 const PORT = process.env.PORT
-const MONGODB_ADDR = process.env.MONGODB_PORT_27017_TCP_ADDR
-const MONGODB_PORT = process.env.MONGODB_PORT_27017_TCP_PORT
+const MONGO_ADDR = process.env.MONGO_PORT_27017_TCP_ADDR
+const MONGO_PORT = process.env.MONGO_PORT_27017_TCP_PORT
 
 app.use(bodyParser.json())
 
@@ -24,9 +24,9 @@ const upload = multer({
   inMemory: true,
 })
 
-const mongodbURL = `mongodb://${MONGODB_ADDR}:${MONGODB_PORT}`
+const mongoURL = `mongodb://${MONGO_ADDR}:${MONGO_PORT}`
 var db = null
-MongoClient.connect(mongodbURL, (err, mongodb) => {
+MongoClient.connect(mongoURL, (err, mongodb) => {
   if (err) {
     console.log(err)
     process.exit(1)
