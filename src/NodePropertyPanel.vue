@@ -1,15 +1,13 @@
 <template>
-<div class="node-property-panel" v-if="active">
-  <div class="close-button-container">
-    <mdc-button @click="onCloseButtonClick"><mdc-icon icon="close"></mdc-icon></mdc-button>
+<div class="node-property-panel">
+  <div v-if="isNodeSet">
+    <rpa-image-matching-node-property
+       :key="node.id" v-if="node.type === 'ImageMatching'"
+       :initial-node="node" @update:node="val => $emit('update:node', val)" />
+    <rpa-while-node-property
+       :key="node.id" v-else-if="node.type === 'While'"
+       :initial-node="node" @update:node="val => $emit('update:node', val)" />
   </div>
-
-  <rpa-image-matching-node-property
-     :key="node.id" v-if="node.type === 'ImageMatching'"
-     :initial-node="node" @update:node="val => $emit('update:node', val)" />
-  <rpa-while-node-property
-     :key="node.id" v-else-if="node.type === 'While'"
-     :initial-node="node" @update:node="val => $emit('update:node', val)" />
 </div>
 </template>
 
@@ -25,11 +23,11 @@ export default {
     'rpa-while-node-property': WhileNodeProperty,
   },
 
-  props: ['node', 'active'],
+  props: ['node'],
 
-  methods: {
-    onCloseButtonClick() {
-      this.$emit('click:closebutton')
+  computed: {
+    isNodeSet() {
+      return this.node !== null
     }
   },
 }
@@ -37,25 +35,10 @@ export default {
 
 <style scoped>
 .node-property-panel {
-    position: fixed;
-    top: 64px;
-    bottom: 0;
-    right: 0;
-    width: 300px;
+    height: 100%;
+    width: 100%;
     padding: 20px 10px;
-    box-sizing: border-box;
     background: #eee;
-    border-left: 1px solid #ccc;
-    overflow-x: hidden;
-    overflow-y: auto;
-}
-
-.node-property-panel.hidden {
-    display: none;
-}
-
-.close-button-container {
-    display: flex;
-    flex-direction: row-reverse;
+    box-sizing: border-box;
 }
 </style>
