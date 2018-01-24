@@ -25,7 +25,7 @@
       <mdc-option value="Drag">Drag</mdc-option>
     </mdc-select>
 
-    <mdc-textfield v-model="node.timeout"
+    <mdc-textfield v-model.number="node.timeout"
                    type="number" min="0" class="timeout" label="Timeout (seconds)" />
   </div>
 

@@ -5,8 +5,10 @@
     <rpa-drawer :drawer-event="drawerEvent" />
     <main class="content">
       <rpa-node-palette />
-      <rpa-workflow-panel />
-      <rpa-node-property-panel :node="nodeToConfigureProperty" @update:node="onNodePropertyUpdate" />
+      <rpa-workflow-panel :is-node-property-panel-active="isNodePropertyPanelActive" />
+      <rpa-node-property-panel :node="nodeToConfigureProperty" :active="isNodePropertyPanelActive"
+                               @update:node="onNodePropertyUpdate"
+                               @click:closebutton="onNodePropertyPanelCloseButtonClick" />
     </main>
   </mdc-layout-app>
 </div>
@@ -37,6 +39,12 @@ export default {
     }
   },
 
+  computed: {
+    isNodePropertyPanelActive() {
+      return this.nodeToConfigureProperty !== null
+    }
+  },
+
   created() {
     var self = this;
 
@@ -48,7 +56,11 @@ export default {
   methods: {
     onNodePropertyUpdate(node) {
       this.$root.$emit('update:nodeproperty', node)
-    }
+    },
+
+    onNodePropertyPanelCloseButtonClick() {
+      this.nodeToConfigureProperty = null
+    },
   }
 }
 </script>

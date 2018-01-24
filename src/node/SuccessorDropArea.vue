@@ -46,6 +46,10 @@ export default {
 
       this.isSuccessorOn = false
 
+      if (!e.dataTransfer) {
+        return false;
+      }
+
       // Get dropped node info
       var nodeInfo = JSON.parse(e.dataTransfer.getData('text'))
 

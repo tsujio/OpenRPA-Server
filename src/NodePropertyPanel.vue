@@ -1,5 +1,9 @@
 <template>
-<div class="node-property-panel" v-if="isNodeSet">
+<div class="node-property-panel" v-if="active">
+  <div class="close-button-container">
+    <mdc-button @click="onCloseButtonClick"><mdc-icon icon="close"></mdc-icon></mdc-button>
+  </div>
+
   <rpa-image-matching-node-property
      :key="node.id" v-if="node.type === 'ImageMatching'"
      :initial-node="node" @update:node="val => $emit('update:node', val)" />
@@ -21,13 +25,13 @@ export default {
     'rpa-while-node-property': WhileNodeProperty,
   },
 
-  props: ['node'],
+  props: ['node', 'active'],
 
-  computed: {
-    isNodeSet() {
-      return this.node !== null
+  methods: {
+    onCloseButtonClick() {
+      this.$emit('click:closebutton')
     }
-  }
+  },
 }
 </script>
 
@@ -48,5 +52,10 @@ export default {
 
 .node-property-panel.hidden {
     display: none;
+}
+
+.close-button-container {
+    display: flex;
+    flex-direction: row-reverse;
 }
 </style>

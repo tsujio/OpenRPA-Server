@@ -1,5 +1,5 @@
 <template>
-<div class="workflow-panel">
+<div class="workflow-panel" :class="{'narrow-for-node-property-panel': isNodePropertyPanelActive}">
   <mdc-textfield v-model="name" label="Title" outline />
 
   <rpa-workflow-canvas :workflow="workflow" @update:node="onNodeUpdate" />
@@ -16,6 +16,8 @@ export default {
   components: {
     'rpa-workflow-canvas': WorkflowCanvas,
   },
+
+  props: ['isNodePropertyPanelActive'],
 
   data() {
     return {
@@ -65,5 +67,9 @@ export default {
     margin-left: 200px;
     padding: 0 20px;
     overflow-x: scroll;
+}
+
+.workflow-panel.narrow-for-node-property-panel {
+    margin-right: 300px;
 }
 </style>
