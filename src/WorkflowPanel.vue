@@ -1,13 +1,12 @@
 <template>
 <div class="workflow-panel">
-  <mdc-textfield v-model="name" label="Title" outline />
+  <mdc-textfield :value="name" @input="onNameUpdate" label="Title" outline />
 
   <rpa-workflow-canvas :workflow="workflow" @update:node="onNodeUpdate" />
 </div>
 </template>
 
 <script>
-import uuidv4 from 'uuid/v4'
 import WorkflowCanvas from './WorkflowCanvas'
 
 export default {
@@ -17,29 +16,11 @@ export default {
     'rpa-workflow-canvas': WorkflowCanvas,
   },
 
-  data() {
-    return {
-      name: "",
-      workflow: [],
-    }
-  },
-
-  created() {
-    this.workflow = this.getEmptyWorkflow()
-  },
+  props: ['name', 'workflow'],
 
   methods: {
-    getEmptyWorkflow() {
-      return [
-        {
-          id: uuidv4(),
-          type: 'Main',
-          displayType: "",
-          name: "",
-          body: [
-          ],
-        },
-      ]
+    onNameUpdate(name) {
+      this.$emit('update:name', name)
     },
 
     onNodeUpdate(accessor, update) {

@@ -1,16 +1,19 @@
 <template>
 <div class="app">
   <mdc-layout-app>
-    <rpa-toolbar :drawer-event="drawerEvent" />
-    <rpa-drawer :drawer-event="drawerEvent" />
+    <rpa-toolbar :drawer-event="'toggle-drawer'" />
+    <rpa-drawer :drawer-event="'toggle-drawer'" />
     <main class="content">
       <rpa-node-palette />
-      <rpa-workflow-panel />
+      <rpa-workflow-panel :name="robot.name" :workflow="robot.workflow"
+                          @update:name="name => { robot.name = name }" />
       <rpa-right-side-panel>
         <rpa-node-property-panel slot="upper"
                                  :node="nodeToConfigureProperty"
                                  @update:node="onNodePropertyUpdate" />
-        <rpa-variable-panel slot="lower" />
+        <rpa-variable-panel slot="lower"
+                            :variables="robot.variables"
+                            @add:variables="onVariableAdd" />
       </rpa-right-side-panel>
     </main>
   </mdc-layout-app>
@@ -18,6 +21,7 @@
 </template>
 
 <script>
+import uuidv4 from 'uuid/v4'
 import Toolbar from './Toolbar'
 import Drawer from './Drawer'
 import NodePalette from './NodePalette'
@@ -41,7 +45,12 @@ export default {
 
   data() {
     return {
-      drawerEvent: 'toggle-drawer',
+      robot: {
+        name: "",
+        workflow: [],
+        variables: [],
+      },
+
       nodeToConfigureProperty: null,
     }
   },
@@ -49,14 +58,33 @@ export default {
   created() {
     var self = this;
 
+    this.robot.workflow = this.getEmptyWorkflow()
+
     this.$root.$on('node.click', function(node) {
       self.nodeToConfigureProperty = node
     })
   },
 
   methods: {
+    getEmptyWorkflow() {
+      return [
+        {
+          id: uuidv4(),
+          type: 'Main',
+          displayType: "",
+          name: "",
+          body: [
+          ],
+        },
+      ]
+    },
+
     onNodePropertyUpdate(node) {
       this.$root.$emit('update:nodeproperty', node)
+    },
+
+    onVariableAdd(variable) {
+      this.robot.variables.push([variable.name, variable.value])
     },
   }
 }
