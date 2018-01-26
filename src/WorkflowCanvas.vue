@@ -1,9 +1,20 @@
 <template>
 <div class="workflow-canvas">
-  <template v-for="node in workflow">
-    <rpa-main-node v-if="node.type === 'Main'" :key="node.id" v-bind="node"
-                   @update:node="(accessor, update) => $emit('update:node', accessor, update)" />
-  </template>
+  <div class="canvas-control">
+    <mdc-button @click="onSaveButtonClick"
+                :disabled="isSaveButtonDisabled"
+                raised>Save</mdc-button>
+    <mdc-button @click="onExecuteButtonClick"
+                :disabled="isExecuteButtonDisabled"
+                raised accent>Execute</mdc-button>
+  </div>
+
+  <div class="canvas-main">
+    <template v-for="node in workflow">
+      <rpa-main-node v-if="node.type === 'Main'" :key="node.id" v-bind="node"
+                     @update:node="(accessor, update) => $emit('update:node', accessor, update)" />
+    </template>
+  </div>
 </div>
 </template>
 
@@ -18,6 +29,21 @@ export default {
   },
 
   props: ['workflow'],
+
+  data() {
+    return {
+      isSaveButtonDisabled: false,
+      isExecuteButtonDisabled: false,
+    }
+  },
+
+  methods: {
+    onSaveButtonClick() {
+    },
+
+    onExecuteButtonClick() {
+    },
+  }
 }
 </script>
 
@@ -26,8 +52,23 @@ export default {
     margin-top: 20px;
     margin-bottom: 20px;
     background: #fafafa;
-    padding: 20px 60px;
     min-width: 500px;
     border: 1px solid lightgray;
+}
+
+.canvas-control {
+    position: sticky;
+    top: 20px;
+    margin-top: 20px;
+    margin-right: 20px;
+    float: right;
+}
+
+.canvas-control button {
+    margin-left: 20px;
+}
+
+.canvas-main {
+    padding: 20px 60px;
 }
 </style>
