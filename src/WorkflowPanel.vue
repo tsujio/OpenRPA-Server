@@ -43,9 +43,10 @@ export default {
 
 <style scoped>
 .workflow-panel {
+    height: calc(100vh - 64px);
     margin-left: 200px;
     padding: 0 20px;
     margin-right: 300px;
-    overflow-x: scroll;
+    overflow: auto;
 }
 </style>
