@@ -19,9 +19,10 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+
 .title {
-    color: white;
+    color: black;
     text-decoration: none;
 }
 </style>
