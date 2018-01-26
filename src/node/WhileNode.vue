@@ -2,7 +2,7 @@
 <div class="while-node" @click.stop="onClick">
   <span class="name">{{ name }}</span>
 
-  <rpa-flow :body="body" @update:body="onBodyUpdate" />
+  <rpa-flow :body="body" @update:flow="onBodyUpdate" />
 </div>
 </template>
 

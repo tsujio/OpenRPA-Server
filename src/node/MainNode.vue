@@ -2,7 +2,7 @@
 <div class="main-node">
   <rpa-start-node />
 
-  <rpa-flow :body="body" @update:body="onBodyUpdate" />
+  <rpa-flow :body="body" @update:flow="onBodyUpdate" />
 
   <rpa-end-node />
 </div>
@@ -27,9 +27,11 @@ export default {
 
   methods: {
     onBodyUpdate(body) {
-      this.$emit('update:node',
-                 [{name: 'id', value: this.id}],
-                 {name: 'body', value: body})
+      const json = this.toJSON()
+
+      json.body = body
+
+      this.$emit('update:node', json)
     },
   },
 }

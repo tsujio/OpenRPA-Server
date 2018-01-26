@@ -23,19 +23,25 @@ export default {
       this.$emit('update:name', name)
     },
 
-    onNodeUpdate(accessor, update) {
-      var target = this.workflow
-
-      for (let prop of accessor) {
-        for (let node of target) {
-          if (node[prop.name] === prop.value) {
-            target = node
-            break
-          }
+    onNodeUpdate(node) {
+      // Find index of node to update
+      var updateIndex = -1
+      for (let i = 0; i < this.workflow.length; i++) {
+        if (this.workflow[i].id === node.id) {
+          updateIndex = i
+          break
         }
       }
 
-      target[update.name] = update.value
+      if (updateIndex === -1) {
+        throw new Error(`node (id=${node.id}) not found`)
+      }
+
+      // Notify to parent
+      this.$emit('update:workflow',
+                 this.workflow.slice(0, updateIndex)
+                 .concat(node)
+                 .concat(this.workflow.slice(updateIndex + 1)))
     }
   },
 }

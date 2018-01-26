@@ -57,7 +57,7 @@ export default {
       }
 
       // Notify to parent
-      this.$emit('update:body',
+      this.$emit('update:flow',
                  this.body.slice(0, sliceIndex)
                  .concat([node])
                  .concat(this.body.slice(sliceIndex)))
@@ -78,7 +78,7 @@ export default {
       }
 
       // Notify to parent
-      this.$emit('update:body',
+      this.$emit('update:flow',
                  this.body.slice(0, updateIndex)
                  .concat(node)
                  .concat(this.body.slice(updateIndex + 1)))

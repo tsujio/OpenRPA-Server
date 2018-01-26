@@ -6,7 +6,8 @@
     <main class="content">
       <rpa-node-palette />
       <rpa-workflow-panel :name="robot.name" :workflow="robot.workflow"
-                          @update:name="name => { robot.name = name }" />
+                          @update:name="name => { robot.name = name }"
+                          @update:workflow="workflow => { robot.workflow = workflow }"/>
       <rpa-right-side-panel>
         <rpa-node-property-panel slot="upper"
                                  :node="nodeToConfigureProperty"

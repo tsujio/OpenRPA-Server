@@ -12,7 +12,7 @@
   <div class="canvas-main">
     <template v-for="node in workflow">
       <rpa-main-node v-if="node.type === 'Main'" :key="node.id" v-bind="node"
-                     @update:node="(accessor, update) => $emit('update:node', accessor, update)" />
+                     @update:node="(node) => $emit('update:node', node)" />
     </template>
   </div>
 </div>
