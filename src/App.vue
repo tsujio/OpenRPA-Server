@@ -13,7 +13,7 @@
                                  @update:node="onNodePropertyUpdate" />
         <rpa-variable-panel slot="lower"
                             :variables="robot.variables"
-                            @add:variables="onVariableAdd" />
+                            @update:variables="onVariablesUpdate" />
       </rpa-right-side-panel>
     </main>
   </mdc-layout-app>
@@ -83,8 +83,8 @@ export default {
       this.$root.$emit('update:nodeproperty', node)
     },
 
-    onVariableAdd(variable) {
-      this.robot.variables.push([variable.name, variable.value])
+    onVariablesUpdate(variables) {
+      this.robot.variables = variables
     },
   }
 }

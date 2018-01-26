@@ -2,26 +2,43 @@
 <div class="variable-panel">
   <span class="title">Variable Table</span>
 
-  <table>
+  <table ref="variableTable">
     <thead><th>Name</th><th>Value</th></thead>
     <tbody>
-      <template v-for="item in variables">
+      <template v-for="(item, index) in variables">
         <tr>
-          <td class="name-cell">{{ item[0] }}</td>
-          <td class="value-cell">{{ item[1] }}</td>
+          <td>
+            <mdc-textfield v-if="editingVariable.index === index && editingVariable.type === 'name'"
+                           :key="item[0] + '-name'"
+                           v-model="editingVariable.nameOrValue"
+                           @blur="onEditingTextfieldBlur" />
+            <span v-else class="cell-value" :data-index="index" :data-type="'name'"
+                  @click="onVariableTableCellClick($event)">{{ item[0] }}</span>
+          </td>
+          <td>
+            <mdc-textfield v-if="editingVariable.index === index && editingVariable.type === 'value'"
+                           :key="item[0] + '-value'"
+                           v-model="editingVariable.nameOrValue"
+                           @blur="onEditingTextfieldBlur" />
+            <span v-else class="cell-value" :data-index="index" :data-type="'value'"
+                  @click="onVariableTableCellClick($event)">{{ item[1] || '&nbsp' }}</span>
+          </td>
         </tr>
       </template>
 
-      <template v-if="isEditingNewVariable">
+      <template v-if="editingVariable.index === -1">
         <tr>
-          <td><mdc-textfield ref="newVariableName" v-model="editingVariable.name" outline
-                             @blur="onNewVariableNameFieldBlur" /></td>
+          <td><mdc-textfield v-model="editingVariable.nameOrValue"
+                             @blur="onEditingTextfieldBlur" /></td>
           <td></td>
         </tr>
       </template>
 
       <tr>
-        <td class="new-variable-help" colspan="2" @click="onNewVariableClick">New variable</td>
+        <td class="new-variable-help" colspan="2">
+          <span class="cell-value" :data-index="-1" :data-type="'name'"
+                @click="onVariableTableCellClick">New variable</span>
+        </td>
       </tr>
     </tbody>
   </table>
@@ -33,40 +50,81 @@ import Vue from 'vue'
 
 export default {
   name: 'rpa-variable-panel',
-
+  
   props: ['variables'],
-
+  
   data() {
     return {
-      isEditingNewVariable: false,
-
       editingVariable: {
-        name: "",
-        value: "",
+        index: -2,
+        type: "",
+        nameOrValue: "",
       },
     }
   },
-
+  
   methods: {
-    onNewVariableClick() {
+    onVariableTableCellClick(e) {
       const self = this
-
-      this.isEditingNewVariable = true
-
+      
+      const index = parseInt(e.target.getAttribute('data-index'))
+      const type = e.target.getAttribute('data-type')
+      
+      var nameOrValue
+      if (index === -1) {
+        nameOrValue = ""
+      } else {
+        nameOrValue = this.variables[index][type === 'name' ? 0 : 1]
+      }
+      
+      // Start editing variable
+      this.editingVariable = {
+        index: index,
+        type: type,
+        nameOrValue: nameOrValue,
+      }
+      
       Vue.nextTick().then(() => {
-        self.$refs.newVariableName.$el.querySelector('input[type="text"]').focus()
+        // maybe bad hack
+        self.$refs.variableTable.querySelector('input[type="text"]').focus()
       })
     },
+    
+    onEditingTextfieldBlur() {
+      const variables = JSON.parse(JSON.stringify(this.variables))
+      
+      const index = this.editingVariable.index
+      const type = this.editingVariable.type
+      const nameOrValue = this.editingVariable.nameOrValue
 
-    onNewVariableNameFieldBlur() {
-      // TODO: check duplicated name
+      const isDuplicated = type === 'name' &&
+            this.variables.some((v) => v[0] === nameOrValue)
 
-      if (this.editingVariable.name !== "") {
-        this.$emit('add:variables', this.editingVariable)
+      if (!isDuplicated) {
+        if (index === -1) {
+          if (nameOrValue !== "") {
+            // Add variable
+            variables.push([nameOrValue, ""])
+          }
+        } else {
+          if (type === 'name' && nameOrValue === "") {
+            // Delete variable
+            variables.splice(index, 1)
+          } else {
+            // Update variable
+            variables[index][type === 'name' ? 0 : 1] = nameOrValue
+          }
+        }
+
+        this.$emit('update:variables', variables)
       }
 
-      this.isEditingNewVariable = false
-      this.editingVariable = { name: "", value: "" }
+      // Stop editing variable
+      this.editingVariable = {
+        index: -2,
+        type: "",
+        nameOrValue: "",
+      }
     },
   }
 }
@@ -92,7 +150,17 @@ table {
 
 th, td {
     border: 1px solid #aaa;
+}
+
+th {
     padding: 5px 10px;
+}
+
+.cell-value {
+    display: inline-block;
+    width: 100%;
+    padding: 5px 10px;
+    box-sizing: border-box;
 }
 
 .new-variable-help {
