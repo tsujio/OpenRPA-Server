@@ -45,8 +45,9 @@ export default {
 .workflow-panel {
     height: calc(100vh - 64px);
     margin-left: 200px;
-    padding: 0 20px;
+    padding: 10px 20px;
     margin-right: 300px;
     overflow: auto;
+    box-sizing: border-box;
 }
 </style>
