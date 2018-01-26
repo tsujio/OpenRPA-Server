@@ -41,7 +41,9 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import './theme';
+
 .node-palette {
     position: fixed;
     top: 64px;
@@ -52,7 +54,7 @@ export default {
     box-sizing: border-box;
     overflow-x: hidden;
     overflow-y: auto;
-    background: #eee;
-    border-right: 1px solid #ccc;
+    background: $rpa-background;
+    border-right: 1px solid $rpa-background-dark;
 }
 </style>

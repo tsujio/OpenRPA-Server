@@ -47,13 +47,15 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import './theme';
+
 .workflow-canvas {
     margin-top: 20px;
     margin-bottom: 20px;
-    background: #fafafa;
+    background: $rpa-background-light;
     min-width: 500px;
-    border: 1px solid lightgray;
+    border: 1px solid $rpa-background-dark;
 }
 
 .canvas-control {

@@ -1,4 +1,4 @@
-import './theme.scss'
+import './main.scss'
 import Vue from 'vue'
 import VueMDCAdapter from 'vue-mdc-adapter'
 import App from './App.vue'

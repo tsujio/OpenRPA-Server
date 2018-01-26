@@ -37,7 +37,9 @@
       <tr>
         <td class="new-variable-help" colspan="2">
           <span class="cell-value" :data-index="-1" :data-type="'name'"
-                @click="onVariableTableCellClick">New variable</span>
+                @click="onVariableTableCellClick">
+            <mdc-icon icon="add"></mdc-icon>
+          </span>
         </td>
       </tr>
     </tbody>
@@ -50,9 +52,9 @@ import Vue from 'vue'
 
 export default {
   name: 'rpa-variable-panel',
-  
+
   props: ['variables'],
-  
+
   data() {
     return {
       editingVariable: {
@@ -62,37 +64,37 @@ export default {
       },
     }
   },
-  
+
   methods: {
     onVariableTableCellClick(e) {
       const self = this
-      
+
       const index = parseInt(e.target.getAttribute('data-index'))
       const type = e.target.getAttribute('data-type')
-      
+
       var nameOrValue
       if (index === -1) {
         nameOrValue = ""
       } else {
         nameOrValue = this.variables[index][type === 'name' ? 0 : 1]
       }
-      
+
       // Start editing variable
       this.editingVariable = {
         index: index,
         type: type,
         nameOrValue: nameOrValue,
       }
-      
+
       Vue.nextTick().then(() => {
         // maybe bad hack
         self.$refs.variableTable.querySelector('input[type="text"]').focus()
       })
     },
-    
+
     onEditingTextfieldBlur() {
       const variables = JSON.parse(JSON.stringify(this.variables))
-      
+
       const index = this.editingVariable.index
       const type = this.editingVariable.type
       const nameOrValue = this.editingVariable.nameOrValue
@@ -130,12 +132,14 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import './theme';
+
 .variable-panel {
     height: 100%;
     width: 100%;
     padding: 20px 10px;
-    background: #eee;
+    background: $rpa-background;
     box-sizing: border-box;
 }
 
@@ -149,22 +153,35 @@ table {
 }
 
 th, td {
-    border: 1px solid #aaa;
+    padding: 5px 10px;
+    box-sizing: border-box;
 }
 
 th {
-    padding: 5px 10px;
+    border: 1px solid $mdc-theme-primary;
+    background: $mdc-theme-primary;
+}
+
+th:not(:last-child) {
+    border-right: 1px solid $rpa-background;
+}
+
+td {
+    border: 1px solid $rpa-background-dark;
+    background: white;
 }
 
 .cell-value {
     display: inline-block;
     width: 100%;
-    padding: 5px 10px;
-    box-sizing: border-box;
 }
 
 .new-variable-help {
-    color: #555;
     text-align: center;
+    padding: 0;
+}
+
+.new-variable-help:hover span {
+    background: $mdc-theme-primary;
 }
 </style>
