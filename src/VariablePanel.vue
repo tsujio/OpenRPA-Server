@@ -7,21 +7,23 @@
     <tbody>
       <template v-for="(item, index) in variables">
         <tr>
-          <td>
-            <mdc-textfield v-if="editingVariable.index === index && editingVariable.type === 'name'"
+          <td :data-index="index" :data-type="'name'"
+              @click="onVariableTableCellClick($event)">
+            <mdc-textfield v-if="editingVariable.index === index &&
+                                 editingVariable.type === 'name'"
                            :key="item[0] + '-name'"
                            v-model="editingVariable.nameOrValue"
                            @blur="onEditingTextfieldBlur" />
-            <span v-else class="cell-value" :data-index="index" :data-type="'name'"
-                  @click="onVariableTableCellClick($event)">{{ item[0] }}</span>
+            <span v-else class="cell-value">{{ item[0] }}</span>
           </td>
-          <td>
-            <mdc-textfield v-if="editingVariable.index === index && editingVariable.type === 'value'"
+          <td :data-index="index" :data-type="'value'"
+              @click="onVariableTableCellClick($event)">
+            <mdc-textfield v-if="editingVariable.index === index &&
+                                 editingVariable.type === 'value'"
                            :key="item[0] + '-value'"
                            v-model="editingVariable.nameOrValue"
                            @blur="onEditingTextfieldBlur" />
-            <span v-else class="cell-value" :data-index="index" :data-type="'value'"
-                  @click="onVariableTableCellClick($event)">{{ item[1] || '&nbsp' }}</span>
+            <span v-else class="cell-value">{{ item[1] || '&nbsp' }}</span>
           </td>
         </tr>
       </template>
@@ -35,11 +37,10 @@
       </template>
 
       <tr>
-        <td class="new-variable-help" colspan="2">
-          <span class="cell-value" :data-index="-1" :data-type="'name'"
-                @click="onVariableTableCellClick">
-            <mdc-icon icon="add"></mdc-icon>
-          </span>
+        <td class="new-variable-help" colspan="2"
+            :data-index="-1" :data-type="'name'"
+            @click="onVariableTableCellClick">
+          <mdc-icon icon="add"></mdc-icon>
         </td>
       </tr>
     </tbody>
@@ -69,8 +70,14 @@ export default {
     onVariableTableCellClick(e) {
       const self = this
 
-      const index = parseInt(e.target.getAttribute('data-index'))
-      const type = e.target.getAttribute('data-type')
+      // Ignore if now editing
+      if (this.editingVariable.index !== -2) {
+        return
+      }
+
+      const elem = e.currentTarget
+      const index = parseInt(elem.getAttribute('data-index'))
+      const type = elem.getAttribute('data-type')
 
       var nameOrValue
       if (index === -1) {
@@ -160,6 +167,7 @@ th, td {
 th {
     border: 1px solid $mdc-theme-primary;
     background: $mdc-theme-primary;
+    width: 50%;
 }
 
 th:not(:last-child) {
@@ -178,10 +186,9 @@ td {
 
 .new-variable-help {
     text-align: center;
-    padding: 0;
 }
 
-.new-variable-help:hover span {
+.new-variable-help:hover {
     background: $mdc-theme-primary;
 }
 </style>
