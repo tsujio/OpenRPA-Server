@@ -26,12 +26,12 @@ export default {
   props: ['body'],
 
   methods: {
-    onBodyUpdate(body) {
+    onBodyUpdate(body, callback) {
       const json = this.toJSON()
 
       json.body = body
 
-      this.$emit('update:node', json)
+      this.$emit('update:node', json, callback)
     },
   },
 }

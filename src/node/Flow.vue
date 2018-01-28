@@ -32,7 +32,31 @@ export default {
 
   props: ['body'],
 
+  created() {
+    const self = this
+
+    this.$root.$on('remove:node', function(node, callback) {
+      const i = self.findNode(node.id)
+
+      if (i !== -1) {
+        self.$emit('update:flow',
+                   self.body.slice(0, i).concat(self.body.slice(i + 1)),
+                   callback)
+      }
+    })
+  },
+
   methods: {
+    findNode(nodeId) {
+      for (let i = 0; i < this.body.length; i++) {
+        if (this.body[i].id === nodeId) {
+          return i
+        }
+      }
+
+      return -1
+    },
+
     createNodeInstance(nodeInfo) {
       const copy = JSON.parse(JSON.stringify(nodeInfo))
 
@@ -43,45 +67,51 @@ export default {
     },
 
     onSuccessorDrop(predecessorId, nodeInfo) {
-      const node = this.createNodeInstance(nodeInfo)
+      const self = this
 
-      // Find index where insert dropped node
-      var sliceIndex = 0
-      if (predecessorId !== null) {
-        for (let i = 0; i < this.body.length; i++) {
-          if (this.body[i].id === predecessorId) {
-            sliceIndex = i + 1
-            break
-          }
-        }
+      const isNodeMove = !!nodeInfo.id
+      const node = isNodeMove ? nodeInfo : this.createNodeInstance(nodeInfo)
+
+      if (predecessorId === node.id) {
+        return
       }
 
-      // Notify to parent
-      this.$emit('update:flow',
-                 this.body.slice(0, sliceIndex)
-                 .concat([node])
-                 .concat(this.body.slice(sliceIndex)))
+      if (isNodeMove) {
+        // Remove moved node at old position
+        this.$root.$emit('remove:node', node, () => {
+          // Insert moved node into new position
+          self.insertNode(predecessorId, node)
+        })
+      } else {
+        // Insert new node
+        this.insertNode(predecessorId, node)
+      }
     },
 
-    onNodeUpdate(node) {
+    insertNode(predecessorId, node) {
+      const insertIndex = this.findNode(predecessorId) + 1
+
+      // Notify parent of updating flow
+      this.$emit('update:flow',
+                 this.body.slice(0, insertIndex)
+                 .concat([node])
+                 .concat(this.body.slice(insertIndex)))
+    },
+
+    onNodeUpdate(node, callback) {
       // Find index of node to update
-      var updateIndex = -1
-      for (let i = 0; i < this.body.length; i++) {
-        if (this.body[i].id === node.id) {
-          updateIndex = i
-          break
-        }
-      }
+      const updateIndex = this.findNode(node.id)
 
       if (updateIndex === -1) {
         throw new Error(`node (id=${node.id}) not found`)
       }
 
-      // Notify to parent
+      // Notify parent of updating flow
       this.$emit('update:flow',
                  this.body.slice(0, updateIndex)
                  .concat(node)
-                 .concat(this.body.slice(updateIndex + 1)))
+                 .concat(this.body.slice(updateIndex + 1)),
+                 callback)
     },
   }
 }

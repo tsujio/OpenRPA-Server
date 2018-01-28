@@ -1,5 +1,6 @@
 <template>
-<div class="while-node" @click.stop="onClick">
+<div class="while-node" @click.stop="onClick"
+     :class="{drag: isDragged}" draggable="true" @dragstart.stop="onDragStart" @dragend.stop="onDragEnd">
   <span class="name">{{ name }}</span>
 
   <rpa-flow :body="body" @update:flow="onBodyUpdate" />
@@ -17,12 +18,12 @@ export default {
   props: ['body'],
 
   methods: {
-    onBodyUpdate(body) {
+    onBodyUpdate(body, callback) {
       const json = this.toJSON()
 
       json.body = body
 
-      this.$emit('update:node', json)
+      this.$emit('update:node', json, callback)
     },
   }
 }
@@ -33,6 +34,7 @@ export default {
 
 .while-node {
     @include container-node-mixin;
+    @include draggable-node-mixin;
 
     background: #eeeeef;
     border: 1px solid #346789;

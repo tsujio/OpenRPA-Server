@@ -7,7 +7,7 @@
       <rpa-node-palette />
       <rpa-workflow-panel :name="robot.name" :workflow="robot.workflow"
                           @update:name="name => { robot.name = name }"
-                          @update:workflow="workflow => { robot.workflow = workflow }"/>
+                          @update:workflow="onWorkflowUpdate" />
       <rpa-right-side-panel>
         <rpa-node-property-panel slot="upper"
                                  :node="nodeToConfigureProperty"
@@ -78,6 +78,16 @@ export default {
           ],
         },
       ]
+    },
+
+    onWorkflowUpdate(workflow, callback) {
+      this.robot.workflow = workflow
+
+      this.$nextTick(() => {
+        if (callback) {
+          callback()
+        }
+      })
     },
 
     onNodePropertyUpdate(node) {

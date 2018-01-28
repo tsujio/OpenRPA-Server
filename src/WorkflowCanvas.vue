@@ -12,7 +12,7 @@
   <div class="canvas-main">
     <template v-for="node in workflow">
       <rpa-main-node v-if="node.type === 'Main'" :key="node.id" v-bind="node"
-                     @update:node="(node) => $emit('update:node', node)" />
+                     @update:node="(node, callback) => $emit('update:node', node, callback)" />
     </template>
   </div>
 </div>
@@ -39,6 +39,7 @@ export default {
 
   methods: {
     onSaveButtonClick() {
+      console.log(this.workflow)
     },
 
     onExecuteButtonClick() {

@@ -23,7 +23,7 @@ export default {
       this.$emit('update:name', name)
     },
 
-    onNodeUpdate(node) {
+    onNodeUpdate(node, callback) {
       // Find index of node to update
       var updateIndex = -1
       for (let i = 0; i < this.workflow.length; i++) {
@@ -41,7 +41,8 @@ export default {
       this.$emit('update:workflow',
                  this.workflow.slice(0, updateIndex)
                  .concat(node)
-                 .concat(this.workflow.slice(updateIndex + 1)))
+                 .concat(this.workflow.slice(updateIndex + 1)),
+                 callback)
     }
   },
 }

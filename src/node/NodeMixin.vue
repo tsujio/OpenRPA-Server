@@ -2,6 +2,12 @@
 export default {
   props: ['id', 'type', 'displayType', 'name'],
 
+  data() {
+    return {
+      isDragged: false
+    }
+  },
+
   created() {
     const self = this
 
@@ -13,13 +19,27 @@ export default {
   },
 
   methods: {
+    serialize() {
+      return JSON.stringify(this.$props)
+    },
+
     toJSON() {
-      return JSON.parse(JSON.stringify(this.$props))
+      return JSON.parse(this.serialize())
     },
 
     onClick() {
       this.$root.$emit('node.click', this)
-    }
+    },
+
+    onDragStart(e) {
+      this.isDragged = true
+
+      e.dataTransfer.setData('text', this.serialize())
+    },
+
+    onDragEnd() {
+      this.isDragged = false
+    },
   }
 }
 </script>

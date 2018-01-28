@@ -1,3 +1,9 @@
+@mixin draggable-node-mixin {
+    &.drag {
+        display: none;
+    }
+}
+
 @mixin node-mixin {
     background: #eeeeef;
     border: 1px solid #346789;
