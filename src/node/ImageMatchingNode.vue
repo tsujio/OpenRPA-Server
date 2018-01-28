@@ -1,6 +1,7 @@
 <template>
 <div class="image-matching-node" @click.stop="onClick"
-     :class="{drag: isDragged}" draggable="true" @dragstart.stop="onDragStart" @dragend.stop="onDragEnd">
+     :class="{select: isSelected, drag: isDragged}"
+     draggable="true" @dragstart.stop="onDragStart" @dragend.stop="onDragEnd">
   {{ name }}
 </div>
 </template>
@@ -23,6 +24,7 @@ export default {
 
 .image-matching-node {
     @include node-mixin;
+    @include selectable-node-mixin;
     @include draggable-node-mixin;
 }
 </style>

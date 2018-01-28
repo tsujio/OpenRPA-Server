@@ -1,6 +1,14 @@
+@import '../theme';
+
 @mixin draggable-node-mixin {
     &.drag {
         display: none;
+    }
+}
+
+@mixin selectable-node-mixin {
+    &.select {
+        border: 2px solid $mdc-theme-primary;
     }
 }
 

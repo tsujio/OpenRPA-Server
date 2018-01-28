@@ -80,15 +80,17 @@ export default {
         // Remove moved node at old position
         this.$root.$emit('remove:node', node, () => {
           // Insert moved node into new position
-          self.insertNode(predecessorId, node)
+          self.insertNode(predecessorId, node, true)
         })
       } else {
         // Insert new node
-        this.insertNode(predecessorId, node)
+        this.insertNode(predecessorId, node, true)
       }
     },
 
-    insertNode(predecessorId, node) {
+    insertNode(predecessorId, node, selectAfterInserted) {
+      const self = this
+
       const insertIndex = this.findNode(predecessorId) + 1
 
       // Notify parent of updating flow
@@ -96,6 +98,13 @@ export default {
                  this.body.slice(0, insertIndex)
                  .concat([node])
                  .concat(this.body.slice(insertIndex)))
+
+      // Select inserted node
+      if (selectAfterInserted) {
+        this.$nextTick(() => {
+          self.$root.$emit('click:node', node)
+        })
+      }
     },
 
     onNodeUpdate(node, callback) {

@@ -4,12 +4,23 @@ export default {
 
   data() {
     return {
+      isSelected: false,
       isDragged: false
     }
   },
 
   created() {
     const self = this
+
+    this.$root.$on('click:node', function(node) {
+      if (self.id === node.id) {
+        self.isSelected = true
+
+        self.$root.$emit('select:node', self)
+      } else {
+        self.isSelected = false
+      }
+    })
 
     this.$root.$on('update:nodeproperty', function(node) {
       if (node.id === self.id) {
@@ -28,7 +39,7 @@ export default {
     },
 
     onClick() {
-      this.$root.$emit('node.click', this)
+      this.$root.$emit('click:node', this)
     },
 
     onDragStart(e) {

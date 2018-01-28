@@ -61,7 +61,7 @@ export default {
 
     this.robot.workflow = this.getEmptyWorkflow()
 
-    this.$root.$on('node.click', function(node) {
+    this.$root.$on('select:node', function(node) {
       self.nodeToConfigureProperty = node
     })
   },

@@ -1,6 +1,7 @@
 <template>
 <div class="while-node" @click.stop="onClick"
-     :class="{drag: isDragged}" draggable="true" @dragstart.stop="onDragStart" @dragend.stop="onDragEnd">
+     :class="{select: isSelected, drag: isDragged}"
+     draggable="true" @dragstart.stop="onDragStart" @dragend.stop="onDragEnd">
   <span class="name">{{ name }}</span>
 
   <rpa-flow :body="body" @update:flow="onBodyUpdate" />
@@ -34,6 +35,7 @@ export default {
 
 .while-node {
     @include container-node-mixin;
+    @include selectable-node-mixin;
     @include draggable-node-mixin;
 
     background: #eeeeef;
