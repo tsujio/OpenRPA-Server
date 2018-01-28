@@ -12,7 +12,7 @@ export default {
   created() {
     const self = this
 
-    this.$root.$on('click:node', function(node) {
+    this.$root.$on('focus:node', function(node) {
       if (self.id === node.id) {
         self.isSelected = true
 
@@ -38,10 +38,6 @@ export default {
       return JSON.parse(this.serialize())
     },
 
-    onClick() {
-      this.$root.$emit('click:node', this)
-    },
-
     onDragStart(e) {
       this.isDragged = true
 
@@ -50,6 +46,14 @@ export default {
 
     onDragEnd() {
       this.isDragged = false
+    },
+
+    onFocus() {
+      this.$root.$emit('focus:node', this)
+    },
+
+    onDeleteKeyDown() {
+      this.$root.$emit('remove:node', this)
     },
   }
 }

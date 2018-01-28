@@ -1,7 +1,8 @@
 <template>
-<div class="while-node" @click.stop="onClick"
+<div class="while-node"
      :class="{select: isSelected, drag: isDragged}"
-     draggable="true" @dragstart.stop="onDragStart" @dragend.stop="onDragEnd">
+     draggable="true" @dragstart.stop="onDragStart" @dragend.stop="onDragEnd"
+     tabindex="0" @focus="onFocus" @keydown.delete.stop="onDeleteKeyDown">
   <span class="name">{{ name }}</span>
 
   <rpa-flow :body="body" @update:flow="onBodyUpdate" />

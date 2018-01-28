@@ -102,7 +102,7 @@ export default {
       // Select inserted node
       if (selectAfterInserted) {
         this.$nextTick(() => {
-          self.$root.$emit('click:node', node)
+          self.$root.$emit('focus:node', node)
         })
       }
     },

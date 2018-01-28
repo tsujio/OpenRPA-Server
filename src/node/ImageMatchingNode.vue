@@ -1,7 +1,8 @@
 <template>
-<div class="image-matching-node" @click.stop="onClick"
+<div class="image-matching-node"
      :class="{select: isSelected, drag: isDragged}"
-     draggable="true" @dragstart.stop="onDragStart" @dragend.stop="onDragEnd">
+     draggable="true" @dragstart.stop="onDragStart" @dragend.stop="onDragEnd"
+     tabindex="0" @focus="onFocus" @keydown.delete.stop="onDeleteKeyDown">
   {{ name }}
 </div>
 </template>

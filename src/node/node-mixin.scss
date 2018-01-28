@@ -23,8 +23,16 @@
     width: 150px;
     height: 60px;
     margin: auto;
+
+    &:focus {
+        outline: none;
+    }
 }
 
 @mixin container-node-mixin {
     display: inline-block;
+
+    &:focus {
+        outline: none;
+    }
 }
