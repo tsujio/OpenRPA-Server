@@ -31,6 +31,7 @@ export default {
 .lower {
     height: calc((100vh - 64px) / 2);
     overflow: auto;
+    background: $rpa-background;
     border-left: 1px solid $rpa-background-dark;
 }
 

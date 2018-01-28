@@ -143,10 +143,8 @@ export default {
 @import './theme';
 
 .variable-panel {
-    height: 100%;
     width: 100%;
     padding: 20px 10px;
-    background: $rpa-background;
     box-sizing: border-box;
 }
 

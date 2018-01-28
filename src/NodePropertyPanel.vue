@@ -35,10 +35,8 @@ export default {
 
 <style scoped>
 .node-property-panel {
-    height: 100%;
     width: 100%;
     padding: 20px 10px;
-    background: #eee;
     box-sizing: border-box;
 }
 </style>
