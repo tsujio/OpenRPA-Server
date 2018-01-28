@@ -7,9 +7,9 @@
 
   <mdc-fab icon="camera_alt" mini class="capture-button" @click="onCaptureButtonClick"></mdc-fab>
 
-  <div class="hidden-until-receive-screenshot" :class="{hidden: !hasImage}">
+  <div v-show="hasImage">
     <div class="screenshot-container" @click="onScreenshotClick">
-      <span class="select-area-notice" :class="{hidden: hasRect}">Click here and select matching area.</span>
+      <span class="select-area-notice" v-show="!hasRect">Click here and select matching area.</span>
       <img :src="node.imageUrlPath" class="screenshot" />
     </div>
 
@@ -25,8 +25,10 @@
       <mdc-option value="Drag">Drag</mdc-option>
     </mdc-select>
 
-    <mdc-textfield v-model.number="node.timeout"
-                   type="number" min="0" class="timeout" label="Timeout (seconds)" />
+<!--
+    <span class="timeout-help">Timeout: {{ node.timeout }} second{{ node.timeout > 1 ? 's' : '' }}</span>
+    <mdc-slider min=0 max=60 step=1 v-model="node.timeout" />
+-->
   </div>
 
   <rpa-screenshot-dialog ref="screenshotDialog" :node="node" @update:pos="onPosUpdate" />
@@ -125,11 +127,6 @@ export default {
     margin: 2rem 10px;
 }
 
-.hidden-until-receive-screenshot.hidden,
-.select-area-notice.hidden {
-    display: none;
-}
-
 .screenshot-container {
     position: relative;
 }
@@ -154,7 +151,11 @@ export default {
 
 .window-title,
 .action,
-.timeout {
+.timeout-help {
     margin-top: 20px;
+}
+
+.timeout-help {
+    display: block;
 }
 </style>
