@@ -3,12 +3,7 @@
   <rpa-successor-drop-area :predecessor-id="null" @successordrop="onSuccessorDrop" />
 
   <template v-for="node in body">
-    <rpa-image-matching-node
-       :key="node.id" v-if="node.type === 'ImageMatching'" v-bind="node"
-       @update:node="onNodeUpdate" />
-    <rpa-while-node
-       :key="node.id" v-else-if="node.type === 'While'" v-bind="node"
-       @update:node="onNodeUpdate" />
+    <component :is="getNodeClass(node)" :key="node.id" v-bind="node" @update:node="onNodeUpdate" />
 
     <rpa-successor-drop-area :key="'sda-' + node.id" :predecessor-id="node.id" @successordrop="onSuccessorDrop" />
   </template>
@@ -47,6 +42,14 @@ export default {
   },
 
   methods: {
+    getNodeClass(node) {
+      switch (node.type) {
+      case 'ImageMatching': return 'rpa-image-matching-node'
+      case 'While': return 'rpa-while-node'
+      default: throw new Error(`Unknown node type: ${node.type}`)
+      }
+    },
+
     findNode(nodeId) {
       for (let i = 0; i < this.body.length; i++) {
         if (this.body[i].id === nodeId) {

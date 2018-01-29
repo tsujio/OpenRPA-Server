@@ -1,12 +1,8 @@
 <template>
 <div class="node-property-panel">
   <div v-if="isNodeSet">
-    <rpa-image-matching-node-property
-       :key="node.id" v-if="node.type === 'ImageMatching'"
-       :initial-node="node" @update:node="val => $emit('update:node', val)" />
-    <rpa-while-node-property
-       :key="node.id" v-else-if="node.type === 'While'"
-       :initial-node="node" @update:node="val => $emit('update:node', val)" />
+    <component :is="nodePropertyClass" :key="node.id" :initial-node="node"
+               @update:node="val => $emit('update:node', val)" />
   </div>
 </div>
 </template>
@@ -28,7 +24,15 @@ export default {
   computed: {
     isNodeSet() {
       return this.node !== null
-    }
+    },
+
+    nodePropertyClass() {
+      switch (this.node.type) {
+      case 'ImageMatching': return 'rpa-image-matching-node-property'
+      case 'While': return 'rpa-while-node-property'
+      default: throw new Error(`Unknown node type: ${node.type}`)
+      }
+    },
   },
 }
 </script>
