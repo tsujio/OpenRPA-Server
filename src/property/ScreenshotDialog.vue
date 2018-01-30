@@ -11,6 +11,8 @@
 </template>
 
 <script>
+import styles from '../theme.scss'
+
 export default {
   name: 'rpa-screenshot-dialog',
 
@@ -91,7 +93,7 @@ export default {
       ctx.save()
 
       // Set line style
-      ctx.strokeStyle = "#00ff00"
+      ctx.strokeStyle = styles.themeAccent
       ctx.lineWidth = 5
       ctx.setLineDash([2, 3])
 
@@ -130,7 +132,7 @@ export default {
       ctx.save()
 
       // Set point style
-      ctx.strokeStyle = ctx.fillStyle = "#c6594b"
+      ctx.strokeStyle = ctx.fillStyle = styles.themePrimary
 
       // Draw point (small filled circle)
       ctx.beginPath()
