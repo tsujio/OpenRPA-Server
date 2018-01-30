@@ -94,8 +94,14 @@ export default {
       this.$root.$emit('update:nodeproperty', node)
     },
 
-    onVariablesUpdate(variables) {
+    onVariablesUpdate(variables, callback) {
       this.robot.variables = variables
+
+      this.$nextTick(() => {
+        if (callback) {
+          callback()
+        }
+      })
     },
   }
 }

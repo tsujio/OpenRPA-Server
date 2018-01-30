@@ -7,19 +7,17 @@
     <tbody>
       <template v-for="(item, index) in variables">
         <tr>
-          <td :data-index="index" :data-type="'name'"
-              @click="onVariableTableCellClick($event)">
-            <mdc-textfield v-if="editingVariable.index === index &&
-                                 editingVariable.type === 'name'"
+          <td :data-index="index"
+              @click="onVariableTableCellClick($event, 'name')">
+            <mdc-textfield v-if="isEditing(index, 'name')"
                            :key="item[0] + '-name'"
                            v-model="editingVariable.nameOrValue"
                            @blur="onEditingTextfieldBlur" />
             <span v-else class="cell-value">{{ item[0] }}</span>
           </td>
-          <td :data-index="index" :data-type="'value'"
-              @click="onVariableTableCellClick($event)">
-            <mdc-textfield v-if="editingVariable.index === index &&
-                                 editingVariable.type === 'value'"
+          <td :data-index="index"
+              @click="onVariableTableCellClick($event, 'value')">
+            <mdc-textfield v-if="isEditing(index, 'value')"
                            :key="item[0] + '-value'"
                            v-model="editingVariable.nameOrValue"
                            @blur="onEditingTextfieldBlur" />
@@ -28,7 +26,7 @@
         </tr>
       </template>
 
-      <template v-if="editingVariable.index === -1">
+      <template v-if="isEditing(-1, 'name')">
         <tr>
           <td><mdc-textfield v-model="editingVariable.nameOrValue"
                              @blur="onEditingTextfieldBlur" /></td>
@@ -38,8 +36,8 @@
 
       <tr>
         <td class="new-variable-help" colspan="2"
-            :data-index="-1" :data-type="'name'"
-            @click="onVariableTableCellClick">
+            :data-index="-1"
+            @click="onVariableTableCellClick($event, 'name')">
           <mdc-icon icon="add"></mdc-icon>
         </td>
       </tr>
@@ -59,25 +57,42 @@ export default {
   data() {
     return {
       editingVariable: {
+        // -2:   not editing
+        // -1:   editing new variable
+        // >= 0: editing variable at the index
         index: -2,
+
+        // 'name' or 'value'
         type: "",
+
+        // value of 'name' or 'value' cell
         nameOrValue: "",
       },
     }
   },
 
   methods: {
-    onVariableTableCellClick(e) {
+    isEditing(index, type) {
+      return this.editingVariable.index === index &&
+        this.editingVariable.type === type
+    },
+
+    onVariableTableCellClick(e, type) {
+      const index = parseInt(e.currentTarget.getAttribute('data-index'))
+      this.startEditingVariable(index, type)
+    },
+
+    onEditingTextfieldBlur() {
+      this.finishEditingVariable()
+    },
+
+    startEditingVariable(index, type) {
       const self = this
 
       // Ignore if now editing
       if (this.editingVariable.index !== -2) {
         return
       }
-
-      const elem = e.currentTarget
-      const index = parseInt(elem.getAttribute('data-index'))
-      const type = elem.getAttribute('data-type')
 
       var nameOrValue
       if (index === -1) {
@@ -95,38 +110,84 @@ export default {
 
       Vue.nextTick().then(() => {
         // maybe bad hack
-        self.$refs.variableTable.querySelector('input[type="text"]').focus()
+        const textfield = this.$refs.variableTable.querySelector('input[type="text"]')
+
+        self.setEventListeners(textfield)
+
+        textfield.focus()
       })
     },
 
-    onEditingTextfieldBlur() {
+    setEventListeners(textfield) {
+      const self = this
+
+      textfield.addEventListener('keydown', (e) => {
+        if (e.key === 'Tab' || e.key === 'Enter') {
+          if (e.preventDefault) {
+            e.preventDefault()
+          }
+          if (e.stopPropagation) {
+            e.stopPropagation()
+          }
+
+          const type = self.editingVariable.type
+          const index = self.editingVariable.index
+
+          // Finish editing if tab or enter inputted
+          self.finishEditingVariable((action) => {
+            // In particular condition, continue to edit variable value
+            if (e.key === 'Tab' && type === 'name') {
+              if (action === 'add' ||
+                  action === 'update' ||
+                  action === 'none' && index >= 0) {
+                const i = action === 'add' ? self.variables.length - 1 : index
+                self.startEditingVariable(i, 'value')
+              }
+            }
+          })
+        }
+      })
+    },
+
+    finishEditingVariable(callback = (action) => {}) {
+      var action = 'none'
+
+      // Ignore if not editing
+      if (this.editingVariable.index === -2) {
+        callback(action)
+        return
+      }
+
       const variables = JSON.parse(JSON.stringify(this.variables))
 
       const index = this.editingVariable.index
       const type = this.editingVariable.type
       const nameOrValue = this.editingVariable.nameOrValue
 
-      const isDuplicated = type === 'name' &&
+      const isNameDuplicated = type === 'name' &&
             this.variables.some((v) => v[0] === nameOrValue)
 
-      if (!isDuplicated) {
+      if (!isNameDuplicated) {
         if (index === -1) {
           if (nameOrValue !== "") {
             // Add variable
             variables.push([nameOrValue, ""])
+            action = 'add'
           }
         } else {
           if (type === 'name' && nameOrValue === "") {
             // Delete variable
             variables.splice(index, 1)
+            action = 'delete'
           } else {
             // Update variable
             variables[index][type === 'name' ? 0 : 1] = nameOrValue
+            action = 'update'
           }
         }
-
-        this.$emit('update:variables', variables)
       }
+
+      this.$emit('update:variables', variables, () => callback(action))
 
       // Stop editing variable
       this.editingVariable = {
