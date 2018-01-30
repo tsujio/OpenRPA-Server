@@ -29,6 +29,7 @@ export default {
       if (e.preventDefault) {
         e.preventDefault()
       }
+
       return false
     },
 
@@ -51,7 +52,12 @@ export default {
       }
 
       // Get dropped node info
-      var nodeInfo = JSON.parse(e.dataTransfer.getData('text'))
+      try {
+        var nodeInfo = JSON.parse(e.dataTransfer.getData('text'))
+      } catch (e) {
+        console.log("Invalid object dropped: ", e)
+        return false
+      }
 
       // Notify to parent
       this.$emit('successordrop', this.predecessorId, nodeInfo)
