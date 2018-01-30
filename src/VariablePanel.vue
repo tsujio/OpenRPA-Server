@@ -245,6 +245,7 @@ td {
 
 .new-variable-help {
     text-align: center;
+    background: $rpa-background-light;
 }
 
 .new-variable-help:hover {
