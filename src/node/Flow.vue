@@ -14,6 +14,7 @@
 import uuidv4 from 'uuid/v4'
 import SuccessorDropArea from './SuccessorDropArea'
 import ImageMatchingNode from './ImageMatchingNode'
+import IfNode from './IfNode'
 import WhileNode from './WhileNode'
 
 export default {
@@ -22,6 +23,7 @@ export default {
   components: {
     'rpa-successor-drop-area': SuccessorDropArea,
     'rpa-image-matching-node': ImageMatchingNode,
+    'rpa-if-node': IfNode,
     'rpa-while-node': WhileNode,
   },
 
@@ -45,6 +47,7 @@ export default {
     getNodeClass(node) {
       switch (node.type) {
       case 'ImageMatching': return 'rpa-image-matching-node'
+      case 'If': return 'rpa-if-node'
       case 'While': return 'rpa-while-node'
       default: throw new Error(`Unknown node type: ${node.type}`)
       }

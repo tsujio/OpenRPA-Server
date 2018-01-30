@@ -64,7 +64,7 @@ export default {
 
 <style scoped>
 .successor-drop-area {
-    width: 200px;
+    width: 150px;
     height: 20px;
     margin: auto;
 }

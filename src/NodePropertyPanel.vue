@@ -9,6 +9,7 @@
 
 <script>
 import ImageMatchingNodeProperty from './property/ImageMatchingNodeProperty'
+import IfNodeProperty from './property/IfNodeProperty'
 import WhileNodeProperty from './property/WhileNodeProperty'
 
 export default {
@@ -16,6 +17,7 @@ export default {
 
   components: {
     'rpa-image-matching-node-property': ImageMatchingNodeProperty,
+    'rpa-if-node-property': IfNodeProperty,
     'rpa-while-node-property': WhileNodeProperty,
   },
 
@@ -29,6 +31,7 @@ export default {
     nodePropertyClass() {
       switch (this.node.type) {
       case 'ImageMatching': return 'rpa-image-matching-node-property'
+      case 'If': return 'rpa-if-node-property'
       case 'While': return 'rpa-while-node-property'
       default: throw new Error(`Unknown node type: ${node.type}`)
       }

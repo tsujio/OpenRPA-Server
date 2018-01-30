@@ -32,6 +32,10 @@ export default {
         {type: 'UserInput', displayType: 'User Input'},
         {type: 'Variable', displayType: 'Read/Write Variable'},
         {type: 'Wait', displayType: 'Wait'},
+        {type: 'If', displayType: 'Branch', ext: {
+          thenFlow: [],
+          elseFlow: [],
+        }},
         {type: 'While', displayType: 'Loop', ext: {
           body: [],
         }},
