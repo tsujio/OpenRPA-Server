@@ -69,7 +69,7 @@ app.post(`/screenshots`, upload.single('screenshot'), (req, res) => {
       id: token,
       data: screenshot.buffer,
       type: imageType(screenshot.buffer).mime,
-      createdAt: moment().utc(),
+      createdAt: moment().utc().toDate(),
     }, (err, doc) => {
       if (err) {
         console.log(err)
@@ -111,7 +111,7 @@ app.get(`/screenshots/:id`, (req, res) => {
 app.post(`/workflows`, (req, res) => {
   const workflow = req.body
 
-  const now = moment().utc()
+  const now = moment().utc().toDate()
   workflow.id = uuidv4()
   workflow.createdAt = now
   workflow.updatedAt = now
@@ -124,7 +124,7 @@ app.post(`/workflows`, (req, res) => {
         return
       }
 
-      res.writeHead('Content-Type', 'application/json')
+      res.setHeader('Content-Type', 'application/json')
       res.send({id: workflow.id})
     })
   })
@@ -142,7 +142,7 @@ app.get(`/workflows/:id`, (req, res) => {
         return
       }
 
-      res.writeHead('Content-Type', 'application/json')
+      res.setHeader('Content-Type', 'application/json')
       res.send(doc)
     })
   })
@@ -155,7 +155,7 @@ app.post(`/workflows/:id`, (req, res) => {
   const workflow = req.body
 
   delete workflow.id
-  workflow.updatedAt = moment().utc()
+  workflow.updatedAt = moment().utc().toDate()
 
   db.collection('workflows', (err, collection) => {
     collection.updateOne({id: req.params.id}, {$set: workflow}, (err, doc) => {
@@ -165,7 +165,7 @@ app.post(`/workflows/:id`, (req, res) => {
         return
       }
 
-      res.writeHead('Content-Type', 'application/json')
+      res.setHeader('Content-Type', 'application/json')
       res.send({})
     })
   })
@@ -183,7 +183,7 @@ app.post(`/workflows/:id`, (req, res) => {
         return
       }
 
-      res.writeHead('Content-Type', 'application/json')
+      res.setHeader('Content-Type', 'application/json')
       res.send({})
     })
   })
@@ -216,7 +216,7 @@ app.get(`/robots/:id`, (req, res) => {
 
       const robotFile = zip.generate({base64: false, compression: 'DEFLATE'})
 
-      res.writeHead('Content-Type', 'application/zip')
+      res.setHeader('Content-Type', 'application/json')
       res.send(robotFile)
     })
   })

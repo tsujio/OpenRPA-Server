@@ -39,7 +39,7 @@ export default {
 
   methods: {
     onSaveButtonClick() {
-      console.log(this.workflow)
+      this.$emit('click:savebutton')
     },
 
     onExecuteButtonClick() {

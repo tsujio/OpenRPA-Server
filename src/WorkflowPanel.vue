@@ -2,7 +2,9 @@
 <div class="workflow-panel">
   <mdc-textfield :value="name" @input="onNameUpdate" label="Title" outline />
 
-  <rpa-workflow-canvas :workflow="workflow" @update:node="onNodeUpdate" />
+  <rpa-workflow-canvas :workflow="workflow"
+                       @update:node="onNodeUpdate"
+                       @click:savebutton="$emit('click:savebutton')" />
 </div>
 </template>
 

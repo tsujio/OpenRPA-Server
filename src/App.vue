@@ -7,7 +7,8 @@
       <rpa-node-palette />
       <rpa-workflow-panel :name="robot.name" :workflow="robot.workflow"
                           @update:name="name => { robot.name = name }"
-                          @update:workflow="onWorkflowUpdate" />
+                          @update:workflow="onWorkflowUpdate"
+                          @click:savebutton="onSaveButtonClick" />
       <rpa-right-side-panel>
         <rpa-node-property-panel slot="upper"
                                  :node="nodeToConfigureProperty"
@@ -23,6 +24,7 @@
 
 <script>
 import uuidv4 from 'uuid/v4'
+import ajax from './lib/ajax'
 import Toolbar from './Toolbar'
 import Drawer from './Drawer'
 import NodePalette from './NodePalette'
@@ -88,6 +90,16 @@ export default {
           callback()
         }
       })
+    },
+
+    onSaveButtonClick() {
+      ajax.post('/workflows', this.robot)
+        .then((result) => {
+          console.log('Saved workflow: ', result)
+        })
+        .catch((err) => {
+          console.log('Failed to save workflow: ', err)
+        })
     },
 
     onNodePropertyUpdate(node) {
