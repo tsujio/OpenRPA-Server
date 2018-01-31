@@ -16,6 +16,8 @@ WORKDIR /openrpa-server
 
 RUN npm install
 
+RUN npm run build
+
 ENV PORT 80
 
 EXPOSE 80
