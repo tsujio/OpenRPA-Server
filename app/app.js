@@ -109,12 +109,17 @@ app.get(`/screenshots/:id`, (req, res) => {
  * Create workflow
  */
 app.post(`/workflows`, (req, res) => {
-  const workflow = req.body
+  const params = req.body
 
   const now = moment().utc().toDate()
-  workflow.id = uuidv4()
-  workflow.createdAt = now
-  workflow.updatedAt = now
+  const workflow = {
+    id: uuidv4(),
+    name: params.name,
+    body: params.body,
+    variables: params.variables,
+    createdAt: now,
+    updatedAt: now,
+  }
 
   db.collection('workflows', (err, collection) => {
     collection.insert(workflow, (err, doc) => {

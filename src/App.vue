@@ -2,11 +2,14 @@
 <div class="app">
   <mdc-layout-app>
     <rpa-toolbar :drawer-event="'toggle-drawer'" />
-    <rpa-drawer :drawer-event="'toggle-drawer'" />
+
+    <rpa-workflow-list-panel :drawer-event="'toggle-drawer'"
+                             :workflows="workflows" />
+
     <main class="content">
       <rpa-node-palette />
-      <rpa-workflow-panel :name="robot.name" :workflow="robot.workflow"
-                          @update:name="name => { robot.name = name }"
+      <rpa-workflow-panel :name="workflow.name" :workflow="workflow.body"
+                          @update:name="name => { workflow.name = name }"
                           @update:workflow="onWorkflowUpdate"
                           @click:savebutton="onSaveButtonClick" />
       <rpa-right-side-panel>
@@ -14,7 +17,7 @@
                                  :node="nodeToConfigureProperty"
                                  @update:node="onNodePropertyUpdate" />
         <rpa-variable-panel slot="lower"
-                            :variables="robot.variables"
+                            :variables="workflow.variables"
                             @update:variables="onVariablesUpdate" />
       </rpa-right-side-panel>
     </main>
@@ -26,7 +29,7 @@
 import uuidv4 from 'uuid/v4'
 import ajax from './lib/ajax'
 import Toolbar from './Toolbar'
-import Drawer from './Drawer'
+import WorkflowListPanel from './WorkflowListPanel'
 import NodePalette from './NodePalette'
 import WorkflowPanel from './WorkflowPanel'
 import RightSidePanel from './RightSidePanel'
@@ -38,7 +41,7 @@ export default {
 
   components: {
     'rpa-toolbar': Toolbar,
-    'rpa-drawer': Drawer,
+    'rpa-workflow-list-panel': WorkflowListPanel,
     'rpa-node-palette': NodePalette,
     'rpa-workflow-panel': WorkflowPanel,
     'rpa-right-side-panel': RightSidePanel,
@@ -50,9 +53,9 @@ export default {
     return {
       workflows: [],
 
-      robot: {
+      workflow: {
         name: "",
-        workflow: [],
+        body: [],
         variables: [],
       },
 
@@ -65,7 +68,11 @@ export default {
 
     this.fetchWorkflows()
 
-    this.robot.workflow = this.getEmptyWorkflow()
+    this.workflow.body = this.getEmptyWorkflow()
+
+    this.$root.$on('select:workflow', function(id) {
+      self.loadWorkflow(id)
+    })
 
     this.$root.$on('select:node', function(node) {
       self.nodeToConfigureProperty = node
@@ -79,10 +86,21 @@ export default {
       ajax.get('/workflows')
         .then((workflows) => {
           self.workflows = workflows
-          console.log(self.workflows)
         })
         .catch((err) => {
           console.log('Failed to fetch workflows: ', err)
+        })
+    },
+
+    loadWorkflow(id) {
+      const self = this
+
+      ajax.get('/workflows/' + id)
+        .then((workflow) => {
+          self.workflow = workflow
+        })
+        .catch((err) => {
+          console.log('Failed to fetch workflow: ', err)
         })
     },
 
@@ -100,7 +118,7 @@ export default {
     },
 
     onWorkflowUpdate(workflow, callback) {
-      this.robot.workflow = workflow
+      this.workflow.body = workflow
 
       this.$nextTick(() => {
         if (callback) {
@@ -110,7 +128,7 @@ export default {
     },
 
     onSaveButtonClick() {
-      ajax.post('/workflows', this.robot)
+      ajax.post('/workflows', this.workflow)
         .then((result) => {
           console.log('Saved workflow: ', result)
         })
@@ -124,7 +142,7 @@ export default {
     },
 
     onVariablesUpdate(variables, callback) {
-      this.robot.variables = variables
+      this.workflow.variables = variables
 
       this.$nextTick(() => {
         if (callback) {
