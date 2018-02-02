@@ -10,7 +10,7 @@
   </div>
 
   <div class="canvas-main">
-    <template v-for="node in workflow">
+    <template v-for="node in workflow.body">
       <rpa-main-node v-if="node.type === 'Main'" :key="node.id" v-bind="node"
                      @update:node="(node, callback) => $emit('update:node', node, callback)" />
     </template>

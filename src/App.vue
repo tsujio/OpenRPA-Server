@@ -8,10 +8,11 @@
 
     <main class="content">
       <rpa-node-palette />
-      <rpa-workflow-panel :name="workflow.name" :workflow="workflow.body"
+      <rpa-workflow-panel :workflow="workflow"
                           @update:name="name => { workflow.name = name }"
-                          @update:workflow="onWorkflowUpdate"
-                          @click:savebutton="onSaveButtonClick" />
+                          @update:body="onWorkflowBodyUpdate"
+                          @click:savebutton="onSaveButtonClick"
+                          @select:deletemenu="onDeleteMenuSelect" />
       <rpa-right-side-panel>
         <rpa-node-property-panel slot="upper"
                                  :node="nodeToConfigureProperty"
@@ -52,15 +53,13 @@ export default {
   data() {
     return {
       workflows: [],
-      workflow: this.getEmptyWorkflow(),
+      workflow: {},
       nodeToConfigureProperty: null,
     }
   },
 
   created() {
     var self = this;
-
-    this.fetchWorkflows()
 
     this.$root.$on('select:workflow', function(id) {
       self.loadWorkflow(id)
@@ -69,9 +68,17 @@ export default {
     this.$root.$on('select:node', function(node) {
       self.nodeToConfigureProperty = node
     })
+
+    this.initializeData()
   },
 
   methods: {
+    initializeData() {
+      this.fetchWorkflows()
+      this.workflow = this.getEmptyWorkflow()
+      this.nodeToConfigureProperty = null
+    },
+
     fetchWorkflows() {
       const self = this
 
@@ -114,8 +121,8 @@ export default {
       }
     },
 
-    onWorkflowUpdate(workflow, callback) {
-      this.workflow.body = workflow
+    onWorkflowBodyUpdate(body, callback) {
+      this.workflow.body = body
 
       this.$nextTick(() => {
         if (callback) {
@@ -150,6 +157,22 @@ export default {
             console.log('Failed to save workflow: ', err)
           })
       }
+    },
+
+    onDeleteMenuSelect() {
+      const self = this
+
+      if (!this.workflow.id) {
+        return
+      }
+
+      ajax.delete('/workflows/' + this.workflow.id)
+        .then(() => {
+          self.initializeData()
+        })
+        .catch((err) => {
+          console.log('Failed to delete workflow: ', err)
+        })
     },
 
     onNodePropertyUpdate(node) {
