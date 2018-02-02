@@ -174,10 +174,12 @@ app.get(`/workflows/:id`, (req, res) => {
 /**
  * Update workflow
  */
-app.post(`/workflows/:id`, (req, res) => {
+app.patch(`/workflows/:id`, (req, res) => {
   const workflow = req.body
 
+  delete workflow._id
   delete workflow.id
+  delete workflow.createdAt
   workflow.updatedAt = moment().utc().toDate()
 
   db.collection('workflows', (err, collection) => {
@@ -197,7 +199,7 @@ app.post(`/workflows/:id`, (req, res) => {
 /**
  * Delete workflow
  */
-app.post(`/workflows/:id`, (req, res) => {
+app.delete(`/workflows/:id`, (req, res) => {
   db.collection('workflows', (err, collection) => {
     collection.deleteOne({id: req.params.id}, (err, doc) => {
       if (err) {

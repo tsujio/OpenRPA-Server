@@ -52,13 +52,7 @@ export default {
   data() {
     return {
       workflows: [],
-
-      workflow: {
-        name: "",
-        body: [],
-        variables: [],
-      },
-
+      workflow: this.getEmptyWorkflow(),
       nodeToConfigureProperty: null,
     }
   },
@@ -67,8 +61,6 @@ export default {
     var self = this;
 
     this.fetchWorkflows()
-
-    this.workflow.body = this.getEmptyWorkflow()
 
     this.$root.$on('select:workflow', function(id) {
       self.loadWorkflow(id)
@@ -98,6 +90,7 @@ export default {
       ajax.get('/workflows/' + id)
         .then((workflow) => {
           self.workflow = workflow
+          self.nodeToConfigureProperty = null
         })
         .catch((err) => {
           console.log('Failed to fetch workflow: ', err)
@@ -105,16 +98,20 @@ export default {
     },
 
     getEmptyWorkflow() {
-      return [
-        {
-          id: uuidv4(),
-          type: 'Main',
-          displayType: "",
-          name: "",
-          body: [
-          ],
-        },
-      ]
+      return {
+        name: 'New Workflow',
+        body: [
+          {
+            id: uuidv4(),
+            type: 'Main',
+            displayType: "",
+            name: "",
+            body: [
+            ],
+          },
+        ],
+        variables: [],
+      }
     },
 
     onWorkflowUpdate(workflow, callback) {
@@ -128,13 +125,31 @@ export default {
     },
 
     onSaveButtonClick() {
-      ajax.post('/workflows', this.workflow)
-        .then((result) => {
-          console.log('Saved workflow: ', result)
-        })
-        .catch((err) => {
-          console.log('Failed to save workflow: ', err)
-        })
+      const self = this
+
+      if (this.workflow.id) {
+        // Update
+        ajax.patch('/workflows/' + this.workflow.id, this.workflow)
+          .then(() => {
+            console.log('Updated workflow: ', self.workflow.id)
+          })
+          .catch((err) => {
+            console.log('Failed to save workflow: ', err)
+          })
+      } else {
+        // Create
+        ajax.post('/workflows', this.workflow)
+          .then((result) => {
+            console.log('Saved workflow: ', result.id)
+
+            self.workflow.id = result.id
+
+            self.fetchWorkflows()
+          })
+          .catch((err) => {
+            console.log('Failed to save workflow: ', err)
+          })
+      }
     },
 
     onNodePropertyUpdate(node) {
