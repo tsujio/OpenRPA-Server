@@ -48,6 +48,8 @@ export default {
 
   data() {
     return {
+      workflows: [],
+
       robot: {
         name: "",
         workflow: [],
@@ -61,6 +63,8 @@ export default {
   created() {
     var self = this;
 
+    this.fetchWorkflows()
+
     this.robot.workflow = this.getEmptyWorkflow()
 
     this.$root.$on('select:node', function(node) {
@@ -69,6 +73,19 @@ export default {
   },
 
   methods: {
+    fetchWorkflows() {
+      const self = this
+
+      ajax.get('/workflows')
+        .then((workflows) => {
+          self.workflows = workflows
+          console.log(self.workflows)
+        })
+        .catch((err) => {
+          console.log('Failed to fetch workflows: ', err)
+        })
+    },
+
     getEmptyWorkflow() {
       return [
         {

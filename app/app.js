@@ -131,6 +131,24 @@ app.post(`/workflows`, (req, res) => {
 })
 
 /**
+ * Get workflows
+ */
+app.get(`/workflows`, (req, res) => {
+  db.collection('workflows', (err, collection) => {
+    collection.find({}, {}).toArray((err, docs) => {
+      if (err) {
+        console.log(err)
+        res.status(500).send(`Fail to load workflows.`)
+        return
+      }
+
+      res.setHeader('Content-Type', 'application/json')
+      res.send(docs)
+    })
+  })
+})
+
+/**
  * Get workflow
  */
 app.get(`/workflows/:id`, (req, res) => {
