@@ -9,6 +9,12 @@
         <mdc-menu-item :disabled="!workflow.id"><mdc-icon icon="delete"></mdc-icon> Delete</mdc-menu-item>
       </mdc-menu>
     </mdc-menu-anchor>
+
+    <mdc-dialog ref="deleteConfirmDialog"
+                title="Confirmation" accept="Delete" cancel="Cancel"
+                @accept="$emit('delete:workflow')">
+      Delete this workflow?
+    </mdc-dialog>
   </div>
 
   <rpa-workflow-canvas :workflow="workflow"
@@ -64,7 +70,7 @@ export default {
 
     onMenuSelect(selected) {
       switch (selected.index) {
-      case 0: this.$emit('select:deletemenu'); break;
+      case 0: this.$refs.deleteConfirmDialog.show(); break;
       }
     },
   },

@@ -12,7 +12,7 @@
                           @update:name="name => { workflow.name = name }"
                           @update:body="onWorkflowBodyUpdate"
                           @click:savebutton="onSaveButtonClick"
-                          @select:deletemenu="onDeleteMenuSelect" />
+                          @delete:workflow="onDeleteWorkflowRequest" />
       <rpa-right-side-panel>
         <rpa-node-property-panel slot="upper"
                                  :node="nodeToConfigureProperty"
@@ -159,7 +159,7 @@ export default {
       }
     },
 
-    onDeleteMenuSelect() {
+    onDeleteWorkflowRequest() {
       const self = this
 
       if (!this.workflow.id) {
