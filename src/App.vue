@@ -8,7 +8,7 @@
 
     <main class="content">
       <rpa-node-palette />
-      <rpa-workflow-panel :workflow="workflow"
+      <rpa-workflow-panel :workflow="workflow" :is-saving="isSaving"
                           @update:name="name => { workflow.name = name }"
                           @update:body="onWorkflowBodyUpdate"
                           @click:savebutton="onSaveButtonClick"
@@ -57,6 +57,8 @@ export default {
       workflows: [],
       workflow: {},
       nodeToConfigureProperty: null,
+
+      isSaving: false,
     }
   },
 
@@ -79,6 +81,7 @@ export default {
       this.fetchWorkflows()
       this.workflow = this.getEmptyWorkflow()
       this.nodeToConfigureProperty = null
+      this.isSaving = false
     },
 
     fetchWorkflows() {
@@ -104,6 +107,7 @@ export default {
         .then((workflow) => {
           self.workflow = workflow
           self.nodeToConfigureProperty = null
+          self.isSaving = false
         })
         .catch((err) => {
           console.log('Failed to fetch workflow: ', err)
@@ -145,16 +149,22 @@ export default {
     onSaveButtonClick() {
       const self = this
 
+      this.isSaving = true
+
       if (this.workflow.id) {
         // Update
         ajax.patch('/workflows/' + this.workflow.id, this.workflow)
           .then(() => {
             console.log('Updated workflow: ', self.workflow.id)
 
+            self.isSaving = false
+
             self.$root.$emit('show-snackbar', {message: 'Saved.'})
           })
           .catch((err) => {
             console.log('Failed to save workflow: ', err)
+
+            self.isSaving = false
 
             self.$root.$emit('show-snackbar', {
               message: 'Failed to save workflow. Please try again.'
@@ -167,6 +177,7 @@ export default {
             console.log('Saved workflow: ', result.id)
 
             self.workflow.id = result.id
+            self.isSaving = false
 
             self.fetchWorkflows()
 
@@ -174,6 +185,8 @@ export default {
           })
           .catch((err) => {
             console.log('Failed to save workflow: ', err)
+
+            self.isSaving = false
 
             self.$root.$emit('show-snackbar', {
               message: 'Failed to save workflow. Please try again.'

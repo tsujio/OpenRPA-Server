@@ -2,7 +2,7 @@
 <div class="workflow-canvas">
   <div class="canvas-control">
     <mdc-button @click="onSaveButtonClick"
-                :disabled="isSaveButtonDisabled"
+                :disabled="isSaving"
                 raised>Save</mdc-button>
     <mdc-button @click="onExecuteButtonClick"
                 :disabled="isExecuteButtonDisabled"
@@ -28,11 +28,10 @@ export default {
     'rpa-main-node': MainNode,
   },
 
-  props: ['workflow'],
+  props: ['workflow', 'isSaving'],
 
   data() {
     return {
-      isSaveButtonDisabled: false,
       isExecuteButtonDisabled: false,
     }
   },

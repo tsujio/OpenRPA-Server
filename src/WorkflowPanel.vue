@@ -19,7 +19,7 @@
     </mdc-dialog>
   </div>
 
-  <rpa-workflow-canvas :workflow="workflow"
+  <rpa-workflow-canvas :workflow="workflow" :is-saving="isSaving"
                        @update:node="onNodeUpdate"
                        @click:savebutton="$emit('click:savebutton')" />
 </div>
@@ -35,7 +35,7 @@ export default {
     'rpa-workflow-canvas': WorkflowCanvas,
   },
 
-  props: ['workflow'],
+  props: ['workflow', 'isSaving'],
 
   computed: {
     isNewWorkflow() {
