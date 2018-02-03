@@ -4,7 +4,8 @@
     <rpa-toolbar :drawer-event="'toggle-drawer'" />
 
     <rpa-workflow-list-panel :drawer-event="'toggle-drawer'"
-                             :workflows="workflows" />
+                             :workflows="workflows"
+                             @add:workflow="onAddWorkflowRequest" />
 
     <main class="content">
       <rpa-node-palette />
@@ -98,6 +99,12 @@ export default {
             message: 'Failed to load workflow list. Please reload page.'
           })
         })
+    },
+
+    onAddWorkflowRequest() {
+      this.workflow = this.getEmptyWorkflow()
+      this.nodeToConfigureProperty = null
+      this.isSaving = false
     },
 
     loadWorkflow(id) {
