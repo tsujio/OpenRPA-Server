@@ -22,6 +22,8 @@
                             @update:variables="onVariablesUpdate" />
       </rpa-right-side-panel>
     </main>
+
+    <mdc-snackbar />
   </mdc-layout-app>
 </div>
 </template>
@@ -88,6 +90,10 @@ export default {
         })
         .catch((err) => {
           console.log('Failed to fetch workflows: ', err)
+
+          self.$root.$emit('show-snackbar', {
+            message: 'Failed to load workflow list. Please reload page.'
+          })
         })
     },
 
@@ -101,6 +107,10 @@ export default {
         })
         .catch((err) => {
           console.log('Failed to fetch workflow: ', err)
+
+          self.$root.$emit('show-snackbar', {
+            message: 'Failed to load workflow. Please select workflow again.'
+          })
         })
     },
 
@@ -140,9 +150,15 @@ export default {
         ajax.patch('/workflows/' + this.workflow.id, this.workflow)
           .then(() => {
             console.log('Updated workflow: ', self.workflow.id)
+
+            self.$root.$emit('show-snackbar', {message: 'Saved.'})
           })
           .catch((err) => {
             console.log('Failed to save workflow: ', err)
+
+            self.$root.$emit('show-snackbar', {
+              message: 'Failed to save workflow. Please try again.'
+            })
           })
       } else {
         // Create
@@ -153,9 +169,15 @@ export default {
             self.workflow.id = result.id
 
             self.fetchWorkflows()
+
+            self.$root.$emit('show-snackbar', {message: 'Saved.'})
           })
           .catch((err) => {
             console.log('Failed to save workflow: ', err)
+
+            self.$root.$emit('show-snackbar', {
+              message: 'Failed to save workflow. Please try again.'
+            })
           })
       }
     },
@@ -170,9 +192,15 @@ export default {
       ajax.delete('/workflows/' + this.workflow.id)
         .then(() => {
           self.initializeData()
+
+          self.$root.$emit('show-snackbar', {message: 'Deleted.'})
         })
         .catch((err) => {
           console.log('Failed to delete workflow: ', err)
+
+          self.$root.$emit('show-snackbar', {
+            message: 'Failed to delete workflow. Please try again.'
+          })
         })
     },
 
