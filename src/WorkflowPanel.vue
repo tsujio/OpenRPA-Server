@@ -6,7 +6,9 @@
     <mdc-menu-anchor>
       <mdc-button @click="$refs.menu.show()"><mdc-icon icon="settings"></mdc-icon></mdc-button>
       <mdc-menu ref="menu" @select="onMenuSelect">
-        <mdc-menu-item :disabled="!workflow.id"><mdc-icon icon="delete"></mdc-icon> Delete</mdc-menu-item>
+        <mdc-menu-item data-menu-item-id="delete" :disabled="!workflow.id">
+          <mdc-icon icon="delete"></mdc-icon> Delete
+        </mdc-menu-item>
       </mdc-menu>
     </mdc-menu-anchor>
 
@@ -69,8 +71,10 @@ export default {
     },
 
     onMenuSelect(selected) {
-      switch (selected.index) {
-      case 0: this.$refs.deleteConfirmDialog.show(); break;
+      const itemId = selected.item.getAttribute('data-menu-item-id')
+
+      switch (itemId) {
+      case 'delete': this.$refs.deleteConfirmDialog.show(); break;
       }
     },
   },
