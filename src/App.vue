@@ -106,6 +106,7 @@ export default {
 
     getEmptyWorkflow() {
       return {
+        id: '',
         name: 'New Workflow',
         body: [
           {
