@@ -20,16 +20,16 @@ export default {
 
 .right-side-panel {
     position: fixed;
-    top: 64px;
+    top: $rpa-toolbar-height;
     right: 0;
     bottom: 0;
-    width: 300px;
+    width: $rpa-right-side-panel-width;
     box-sizing: border-box;
 }
 
 .upper,
 .lower {
-    height: calc((100vh - 64px) / 2);
+    height: calc((100vh - #{$rpa-toolbar-height}) / 2);
     overflow: auto;
     background: $rpa-background;
     border-left: 1px solid $rpa-background-dark;

@@ -50,10 +50,10 @@ export default {
 
 .node-palette {
     position: fixed;
-    top: 64px;
+    top: $rpa-toolbar-height;
     bottom: 0;
     left: 0;
-    width: 200px;
+    width: $rpa-left-side-panel-width;
     padding: 20px 10px;
     box-sizing: border-box;
     overflow-x: hidden;

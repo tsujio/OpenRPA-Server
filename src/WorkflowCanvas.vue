@@ -51,16 +51,18 @@ export default {
 @import './theme';
 
 .workflow-canvas {
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin: 20px;
     background: $rpa-background-light;
-    min-width: 500px;
+    display: inline-block;
+    min-width: calc(100% - 20px * 2);
     border: 1px solid $rpa-background-dark;
+    box-sizing: border-box;
 }
 
 .canvas-control {
     position: sticky;
     top: 20px;
+    right: 20px;
     margin-top: 20px;
     margin-right: 20px;
     float: right;

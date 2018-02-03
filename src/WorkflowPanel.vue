@@ -81,11 +81,14 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import './theme';
+
 .navigation {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
+    margin: 0 20px;
 }
 
 .mdc-simple-menu {
@@ -96,10 +99,11 @@ export default {
 }
 
 .workflow-panel {
-    height: calc(100vh - 64px);
-    margin-left: 200px;
-    padding: 10px 20px;
-    margin-right: 300px;
+    height: calc(100vh - #{$rpa-toolbar-height});
+    width: calc(100vw - #{$rpa-left-side-panel-width} - #{$rpa-right-side-panel-width});
+    margin-left: $rpa-left-side-panel-width;
+    padding: 10px 0;
+    margin-right: $rpa-right-side-panel-width;
     overflow: auto;
     box-sizing: border-box;
 }

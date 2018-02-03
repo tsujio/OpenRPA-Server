@@ -6,6 +6,10 @@ $rpa-background: #eeeeee;
 $rpa-background-light: #f5f5f5;
 $rpa-background-dark: #bcbcbc;
 
+$rpa-toolbar-height: 64px;
+$rpa-left-side-panel-width: 200px;
+$rpa-right-side-panel-width: 300px;
+
 :export {
     themePrimary: $mdc-theme-primary;
     themeAccent: $mdc-theme-accent;
