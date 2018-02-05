@@ -2,7 +2,7 @@
 
 @mixin draggable-node-mixin {
     &.drag {
-        display: none;
+        opacity: 0;
     }
 }
 

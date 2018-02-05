@@ -82,6 +82,15 @@ export default {
         return
       }
 
+      // Ignore if dropped inside node itself
+      var parent = this.$parent
+      while (parent && parent.type !== 'Main') {
+        if (parent.id === node.id) {
+          return
+        }
+        parent = parent.$parent
+      }
+
       if (isNodeMove) {
         // Remove moved node at old position
         this.$root.$emit('remove:node', node, () => {
