@@ -142,9 +142,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import './node-mixin';
 
-.flow {
-    @include container-node-mixin;
-}
 </style>
