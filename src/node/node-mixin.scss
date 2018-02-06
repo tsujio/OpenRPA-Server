@@ -12,6 +12,10 @@
     }
 }
 
+$node-width: 150px;
+$node-height: 60px;
+$node-interval: 30px;
+
 @mixin node-mixin {
     background: #eeeeef;
     border: 1px solid #346789;
@@ -20,8 +24,8 @@
     justify-content: center;
     border-radius: 0.8em;
     cursor: move;
-    width: 150px;
-    height: 60px;
+    width: $node-width;
+    height: $node-height;
 
     &:focus {
         outline: none;
@@ -33,5 +37,21 @@
 
     &:focus {
         outline: none;
+    }
+}
+
+@mixin pointer-having-node-mixin {
+    position: relative;
+
+    &:after {
+        content: "";
+        position: absolute;
+        height: 0;
+        width: 0;
+        bottom: calc(-1 * (#{$node-interval} + 10px) / 2);
+        left: calc((#{$node-width} - 10px) / 2);
+        border-top: 10px solid $mdc-theme-primary;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
     }
 }

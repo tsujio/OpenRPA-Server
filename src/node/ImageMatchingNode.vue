@@ -27,5 +27,6 @@ export default {
     @include node-mixin;
     @include selectable-node-mixin;
     @include draggable-node-mixin;
+    @include pointer-having-node-mixin;
 }
 </style>

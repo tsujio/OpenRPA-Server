@@ -68,14 +68,16 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import './node-mixin';
+
 .successor-drop-area {
-    min-width: 150px;
+    min-width: $node-width;
     width: 100%;
-    height: 20px;
+    height: $node-interval;
 }
 
 .successor-drop-area.emphasized {
-    height: 80px;
+    height: calc(#{$node-interval} + #{$node-height});
 }
 </style>

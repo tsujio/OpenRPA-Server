@@ -15,5 +15,6 @@ export default {
 
 .start-node {
     @include node-mixin;
+    @include pointer-having-node-mixin;
 }
 </style>
