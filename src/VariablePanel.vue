@@ -47,8 +47,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
-
 export default {
   name: 'rpa-variable-panel',
 
@@ -108,9 +106,9 @@ export default {
         nameOrValue: nameOrValue,
       }
 
-      Vue.nextTick().then(() => {
+      this.$nextTick().then(() => {
         // maybe bad hack
-        const textfield = this.$refs.variableTable.querySelector('input[type="text"]')
+        const textfield = self.$refs.variableTable.querySelector('input[type="text"]')
 
         self.setEventListeners(textfield)
 
