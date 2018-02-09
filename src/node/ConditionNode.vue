@@ -42,5 +42,6 @@ export default {
     min-width: $node-width;
     left: calc(-1 * #{$node-width} / 2);
     top: calc(30px / 2);
+    text-align: center;
 }
 </style>
