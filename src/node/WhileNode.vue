@@ -25,7 +25,7 @@ export default {
     'rpa-condition-node': ConditionNode,
   },
 
-  props: ['body'],
+  props: ['condition', 'body'],
 
   methods: {
     onBodyUpdate(body, callback) {

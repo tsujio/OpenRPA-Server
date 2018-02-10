@@ -34,7 +34,7 @@ export default {
     'rpa-condition-node': ConditionNode,
   },
 
-  props: ['thenFlow', 'elseFlow'],
+  props: ['condition', 'thenFlow', 'elseFlow'],
 
   methods: {
     onThenFlowUpdate() {

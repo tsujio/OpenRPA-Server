@@ -33,10 +33,12 @@ export default {
         {type: 'Variable', displayType: 'Read/Write Variable'},
         {type: 'Wait', displayType: 'Wait'},
         {type: 'If', displayType: 'Branch', ext: {
+          condition: [],
           thenFlow: [],
           elseFlow: [],
         }},
         {type: 'While', displayType: 'Loop', ext: {
+          condition: [],
           body: [],
         }},
       ]
